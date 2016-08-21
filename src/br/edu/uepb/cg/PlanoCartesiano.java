@@ -54,6 +54,8 @@ public class PlanoCartesiano extends JPanel {
 		
 		g.setColor(Color.black);
 		g.drawLine(300, 40, 300, 500);
+                
+                
 		
 		
 		
