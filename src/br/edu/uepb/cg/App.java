@@ -16,6 +16,7 @@ public class App extends javax.swing.JFrame {
      */
     public App() {
         initComponents();
+        
     }
 
     /**
@@ -42,7 +43,7 @@ public class App extends javax.swing.JFrame {
         jSpinnerFinalX = new javax.swing.JSpinner();
         jSpinnerFinalY = new javax.swing.JSpinner();
         jbGerar = new javax.swing.JButton();
-        jPanelSolution = new javax.swing.JPanel();
+        jPanelSolution = new PlanoCartesiano();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -54,6 +55,7 @@ public class App extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Computação Gráfica");
+        setMinimumSize(new java.awt.Dimension(1080, 720));
         setPreferredSize(new java.awt.Dimension(1080, 720));
 
         jPanelConfig.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
@@ -201,7 +203,7 @@ public class App extends javax.swing.JFrame {
         jPanelSolution.setLayout(jPanelSolutionLayout);
         jPanelSolutionLayout.setHorizontalGroup(
             jPanelSolutionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 625, Short.MAX_VALUE)
+            .addGap(0, 619, Short.MAX_VALUE)
         );
         jPanelSolutionLayout.setVerticalGroup(
             jPanelSolutionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -257,7 +259,7 @@ public class App extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanelConfig, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanelSolution, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1))
