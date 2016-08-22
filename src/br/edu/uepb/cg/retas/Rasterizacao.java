@@ -54,7 +54,7 @@ public class Rasterizacao {
             g.fillRect(Math.round(centralizaPonto(x, y, panel).getX()), Math.round(centralizaPonto(x, y, panel).getY()), 1, 1);
 
             // Seta o pontos no jTextArea
-            setSolution(jTextAreaSolution, x, y, ++count);
+            setSolution(jTextAreaSolution, x, y, ++count, null);
 
             x += xInc;
             y += yInc;
@@ -71,47 +71,18 @@ public class Rasterizacao {
      * @param jTextAreaSolution jTextArea para exibir solução
      */
     public static void pontoMedio(Ponto pInicial, Ponto pFinal, Color cor, JPanel panel, JTextArea jTextAreaSolution) {
-        float dX = Math.abs(pFinal.getX() - pInicial.getX());
-        float dY = Math.abs(pFinal.getY() - pInicial.getY());
+        float dX = pFinal.getX() - pInicial.getX();
+        float dY = pFinal.getY() - pInicial.getY();
+
+        float d = 2 * dX - dX; // Valor inicial de d
+        float incE = 2 * dY; // Incremento em E
+        float incNE = 2 * (dY - dX); // Incremento em NE
+
         float x = pInicial.getX(), y = pInicial.getY();
 
-        /**
-         * Análise dos 8 octantes com relação a variação de dx e dy
-         */
-        int incX1 = 0, incY1 = 0, incX2 = 0, incY2 = 0;
-        if (dX > 0) { // X cresce
-            incX1 = incX2 = 1;
-        } else if (dX < 0) { // X decresce
-            incX1 = incX2 = -1;
-        }
+        int count = 0; // Contador de iterações
 
-        if (dY > 0) { // Y cresce
-            incY1 = 1;
-        } else if (dX < 0) { // Y decresce
-            incY1 = -1;
-        }
-
-        float eixoMaior, eixoMenor;
-        if (Math.abs(dX) >= Math.abs(dY)) {
-            eixoMaior = Math.abs(dX);
-            eixoMenor = Math.abs(dY);
-        } else {
-            eixoMaior = Math.abs(dY);
-            eixoMenor = Math.abs(dX);
-
-            if (dY > 0) // Y cresce
-            {
-                incY2 = 1;
-            } else if (dY < 0) // Y decresce
-            {
-                incY2 = -1;
-            }
-            incX2 = 0;
-        }
-        
-        float numerador = eixoMaior / 2;
-
-        for (int i = 1; i <= eixoMaior + 1; i++) {
+        do {
             /**
              * Desenha o ponto da reta
              */
@@ -120,18 +91,19 @@ public class Rasterizacao {
             g.fillRect(Math.round(centralizaPonto(x, y, panel).getX()), Math.round(centralizaPonto(x, y, panel).getY()), 1, 1);
 
             // Seta o pontos no jTextArea
-            setSolution(jTextAreaSolution, x, y, i);
+            setSolution(jTextAreaSolution, x, y, ++count, String.valueOf(d));
 
-            numerador += eixoMenor;
-            if (numerador > eixoMaior) {
-                numerador -= eixoMaior;
-                x = incX1;
-                y = incY1;
+            if (d <= 0) {
+                // Escolhe E
+                d += incE;
+                x += 1;
             } else {
-                x = incX2;
-                y = incY2;
+                // Escolhe NE
+                d += incNE;
+                x += 1;
+                y += 1;
             }
-        }
+        } while (x <= pFinal.getX());
     }
 
     /**
@@ -142,22 +114,27 @@ public class Rasterizacao {
      * @param panel JPanel onde o ponto é desenhado
      * @return Ponto o ponto com as coordenadas centralizadas
      */
-    private static Ponto centralizaPonto(double x, double y, JPanel panel) {
+    private static Ponto centralizaPonto(float x, float y, JPanel panel) {
         float xTemp = (float) (x + (panel.getWidth() / 2));
         float yTemp = (float) ((panel.getHeight() / 2) - y);
         return new Ponto(xTemp, yTemp);
     }
 
     /**
+     * Popula o jTextArea com a solução do problema.
      *
      * @param jTextArea
      */
-    private static void setSolution(JTextArea jTextArea, double x, double y, int count) {
+    private static void setSolution(JTextArea jTextArea, float x, float y, int count, String d) {
         String solution = "";
 
         solution += jTextArea.getText();
         solution += String.format("%02d", count);
-        solution += " - (";
+        solution += " - ";
+        if (d != null) {
+            solution += " d = " + new DecimalFormat("0.##", new DecimalFormatSymbols(Locale.ENGLISH)).format((float) x) + " | ";
+        }
+        solution += "(";
         solution += new DecimalFormat("0.##", new DecimalFormatSymbols(Locale.ENGLISH)).format(x);
         solution += ", ";
         solution += new DecimalFormat("0.##", new DecimalFormatSymbols(Locale.ENGLISH)).format(y);
