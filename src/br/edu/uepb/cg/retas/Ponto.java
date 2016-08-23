@@ -30,6 +30,12 @@ public class Ponto {
     public void setY(float y) {
         this.y = y;
     }
+    
+    public void swap() {
+        float temp = x;
+        setX(y);
+        setY(temp);
+    }
 
     @Override
     public int hashCode() {

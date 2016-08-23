@@ -74,7 +74,7 @@ public class Rasterizacao {
         float dX = pFinal.getX() - pInicial.getX();
         float dY = pFinal.getY() - pInicial.getY();
 
-        float d = 2 * dX - dX; // Valor inicial de d
+        float d = 2 * Math.abs(dY - dX); // Valor inicial de d
         float incE = 2 * dY; // Incremento em E
         float incNE = 2 * (dY - dX); // Incremento em NE
 
@@ -83,6 +83,7 @@ public class Rasterizacao {
         int count = 0; // Contador de iterações
 
         do {
+
             /**
              * Desenha o ponto da reta
              */
@@ -104,6 +105,70 @@ public class Rasterizacao {
                 y += 1;
             }
         } while (x <= pFinal.getX());
+    }
+
+    public static void pontoMedio2(Ponto pInicial, Ponto pFinal, Color cor, JPanel panel, JTextArea jTextAreaSolution) {
+        float dX = Math.abs(pFinal.getX() - pInicial.getX());
+        float dY = Math.abs(pFinal.getY() - pInicial.getY());
+        int x, y;
+        boolean inclinacao = false;
+
+        // Trantando os octantes
+        if (dY > dX) {
+            inclinacao = true;
+
+            // swap nos pontos P(x,y) passa a ser P(y,x)
+            pInicial.swap();
+            pFinal.swap();
+
+            // swap no dX, dY
+            float temp = dY;
+            dY = dX;
+            dX = temp;
+        }
+
+        if (pInicial.getX() > pFinal.getY()) {
+            // Swap dos pontos
+            Ponto pTemp = pInicial;
+            pInicial = pFinal;
+            pFinal = pTemp;
+        }
+
+        int incY = 1;
+        if (pInicial.getY() > pFinal.getY()) {
+            incY = -1;
+        }
+        // Fim do tratamento dos octantes
+
+        float d = (Math.abs(dY - dX)) * 2;
+        float incE = dY * 2;
+        float incNE = (dY - dX) * 2;
+
+        x = Math.round(pInicial.getX());
+        y = Math.round(pInicial.getY());
+        int count = 0;
+        for (; x <= Math.round(pFinal.getX()); ++x) {
+            if (d <= 0) {
+                d += incE;
+            } else {
+                d += incNE;
+                y += incY;
+            }
+            
+            /**
+             * Desenha o ponto da reta
+             */
+            Graphics g = panel.getGraphics();
+            g.setColor(cor);
+            if(inclinacao)
+                g.fillRect(Math.round(centralizaPonto(y, x, panel).getX()), Math.round(centralizaPonto(x, y, panel).getY()), 1, 1);
+            else
+                g.fillRect(Math.round(centralizaPonto(x, y, panel).getX()), Math.round(centralizaPonto(x, y, panel).getY()), 1, 1);
+
+            // Seta o pontos no jTextArea
+            setSolution(jTextAreaSolution, x, y, ++count, String.valueOf(d));
+                
+        }
     }
 
     /**
@@ -142,16 +207,11 @@ public class Rasterizacao {
         jTextArea.setText(solution.toString());
     }
 
-    private int getOitante(Ponto p1, Ponto p2) {
-        double deltaX = p2.getX() - p1.getX();
-        double deltaY = p2.getY() - p1.getY();
-
-        double m = deltaY / deltaX;
-
-        // 1° Oitante
-        if ((m >= 0 && m <= 1)) {
-            return 1;
-        }
-        return 1;
-    }
+//    private static void getOctante(Ponto p1, Ponto p2) {
+//        float deltaX = p2.getX() - p1.getX();
+//        float deltaY = p2.getY() - p1.getY();
+//        float m = deltaY / deltaX;
+//
+//        if (m > 1) {// 2 Octante 
+//            p1.se
 }

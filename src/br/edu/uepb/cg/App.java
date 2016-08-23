@@ -447,7 +447,7 @@ public class App extends javax.swing.JFrame {
         if (rbDDA.isSelected()) {
             Rasterizacao.dda(pInicial, pFinal, cor, jPanelSolution, jTextAreaSolution);
         } else if (rbPontoMedio.isSelected()) {
-            Rasterizacao.pontoMedio(pInicial, pFinal, cor, jPanelSolution, jTextAreaSolution);
+            Rasterizacao.pontoMedio2(pInicial, pFinal, cor, jPanelSolution, jTextAreaSolution);
         }
     }//GEN-LAST:event_jbGerarActionPerformed
 
