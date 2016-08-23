@@ -71,46 +71,9 @@ public class Rasterizacao {
      * @param jTextAreaSolution jTextArea para exibir solução
      */
     public static void pontoMedio(Ponto pInicial, Ponto pFinal, Color cor, JPanel panel, JTextArea jTextAreaSolution) {
-        float dX = pFinal.getX() - pInicial.getX();
-        float dY = pFinal.getY() - pInicial.getY();
-
-        float d = 2 * Math.abs(dY - dX); // Valor inicial de d
-        float incE = 2 * dY; // Incremento em E
-        float incNE = 2 * (dY - dX); // Incremento em NE
-
-        float x = pInicial.getX(), y = pInicial.getY();
-
-        int count = 0; // Contador de iterações
-
-        do {
-
-            /**
-             * Desenha o ponto da reta
-             */
-            Graphics g = panel.getGraphics();
-            g.setColor(cor);
-            g.fillRect(Math.round(centralizaPonto(x, y, panel).getX()), Math.round(centralizaPonto(x, y, panel).getY()), 1, 1);
-
-            // Seta o pontos no jTextArea
-            setSolution(jTextAreaSolution, x, y, ++count, String.valueOf(d));
-
-            if (d <= 0) {
-                // Escolhe E
-                d += incE;
-                x += 1;
-            } else {
-                // Escolhe NE
-                d += incNE;
-                x += 1;
-                y += 1;
-            }
-        } while (x <= pFinal.getX());
-    }
-
-    public static void pontoMedio2(Ponto pInicial, Ponto pFinal, Color cor, JPanel panel, JTextArea jTextAreaSolution) {
-        float dX = Math.abs(pFinal.getX() - pInicial.getX());
+       float dX = Math.abs(pFinal.getX() - pInicial.getX());
         float dY = Math.abs(pFinal.getY() - pInicial.getY());
-        int x, y;
+        float x, y;
         boolean inclinacao = false;
 
         // Trantando os octantes
@@ -127,7 +90,7 @@ public class Rasterizacao {
             dX = temp;
         }
 
-        if (pInicial.getX() > pFinal.getY()) {
+        if (pInicial.getX() > pFinal.getX()) {
             // Swap dos pontos
             Ponto pTemp = pInicial;
             pInicial = pFinal;
@@ -144,10 +107,10 @@ public class Rasterizacao {
         float incE = dY * 2;
         float incNE = (dY - dX) * 2;
 
-        x = Math.round(pInicial.getX());
-        y = Math.round(pInicial.getY());
+        x = pInicial.getX();
+        y = pInicial.getY();
         int count = 0;
-        for (; x <= Math.round(pFinal.getX()); ++x) {
+        for (; x <= pFinal.getX(); ++x) {
             if (d <= 0) {
                 d += incE;
             } else {
