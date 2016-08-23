@@ -71,7 +71,7 @@ public class Rasterizacao {
      * @param jTextAreaSolution jTextArea para exibir solução
      */
     public static void pontoMedio(Ponto pInicial, Ponto pFinal, Color cor, JPanel panel, JTextArea jTextAreaSolution) {
-       float dX = Math.abs(pFinal.getX() - pInicial.getX());
+        float dX = Math.abs(pFinal.getX() - pInicial.getX());
         float dY = Math.abs(pFinal.getY() - pInicial.getY());
         float x, y;
         boolean inclinacao = false;
@@ -110,6 +110,7 @@ public class Rasterizacao {
         x = pInicial.getX();
         y = pInicial.getY();
         int count = 0;
+        
         for (; x <= pFinal.getX(); ++x) {
             if (d <= 0) {
                 d += incE;
@@ -117,20 +118,21 @@ public class Rasterizacao {
                 d += incNE;
                 y += incY;
             }
-            
+
             /**
              * Desenha o ponto da reta
              */
             Graphics g = panel.getGraphics();
             g.setColor(cor);
-            if(inclinacao)
+            if (inclinacao) {
                 g.fillRect(Math.round(centralizaPonto(y, x, panel).getX()), Math.round(centralizaPonto(x, y, panel).getY()), 1, 1);
-            else
+                // Seta o pontos no jTextArea
+                setSolution(jTextAreaSolution, y, x, ++count, String.valueOf(d));
+            } else {
                 g.fillRect(Math.round(centralizaPonto(x, y, panel).getX()), Math.round(centralizaPonto(x, y, panel).getY()), 1, 1);
-
-            // Seta o pontos no jTextArea
-            setSolution(jTextAreaSolution, x, y, ++count, String.valueOf(d));
-                
+                // Seta o pontos no jTextArea
+                setSolution(jTextAreaSolution, x, y, ++count, String.valueOf(d));
+            }
         }
     }
 
