@@ -35,8 +35,8 @@ public class PanelPlanoCartesiano extends JPanel {
         this.setBackground(Color.white);
         g.setColor(Color.LIGHT_GRAY);
 
-        int width = super.getWidth();
-        int height = super.getHeight();
+        int width = this.getWidth();
+        int height = this.getHeight();
 
         // Reta x
         g.drawLine(0, height / 2, width, height / 2); // x1, y1, x2, y2 
@@ -53,11 +53,11 @@ public class PanelPlanoCartesiano extends JPanel {
         return this.getHeight();
     }
 
-    public float getValorCentroX() {
-        return (float) getLargura() / 2;
+    public int getValorCentroX() {
+        return getLargura() / 2;
     }
 
-    public float getValorCentroY() {
-        return (float) getAltura() / 2;
+    public int getValorCentroY() {
+        return getAltura() / 2;
     }
 }

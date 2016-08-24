@@ -171,12 +171,4 @@ public class Rasterizacao {
         solution += ")\n";
         jTextArea.setText(solution.toString());
     }
-
-//    private static void getOctante(Ponto p1, Ponto p2) {
-//        float deltaX = p2.getX() - p1.getX();
-//        float deltaY = p2.getY() - p1.getY();
-//        float m = deltaY / deltaX;
-//
-//        if (m > 1) {// 2 Octante 
-//            p1.se
 }

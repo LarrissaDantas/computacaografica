@@ -7,12 +7,10 @@ import br.edu.uepb.cg.panels.PanelMenuRasterizacao;
 import br.edu.uepb.cg.panels.PanelPlanoCartesiano;
 import br.edu.uepb.cg.retas.Rasterizacao;
 import br.edu.uepb.cg.sistemacoordenadas.FuncoesDeNormalizacao;
-import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.awt.event.MouseMotionListener;
 import javax.swing.JPanel;
 
 /**
@@ -467,22 +465,29 @@ public class App extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Calcula e exibe o sistema de coordenadas de acordo com os pontos no plano cartesiano
+     * O Evento mouseMoved é utilizado para pegar as coordenadas no plano cartesiano
+     */
     private void sistemaCoordenadas() {
         panelBody.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
                 super.mouseMoved(e); //To change body of generated methods, choose Tools | Templates.
 
+                // Pega a instancia do Plano Cartesiano
                 PanelPlanoCartesiano planoCartesiano = PanelPlanoCartesiano.getInstance();
 
-                float dcx = e.getX() - planoCartesiano.getValorCentroX();
-                float dcy = (e.getY() - planoCartesiano.getValorCentroY()) * -1;
+                // Calcula o dc - Entrada de dispositivo | Será o mesmo que a saída
+                int dcx = e.getX() - planoCartesiano.getValorCentroX();
+                int dcy = (e.getY() - planoCartesiano.getValorCentroY()) * -1;
 
+                // Calcula o ndc - Normalização do dispositivo
                 float ndcx = FuncoesDeNormalizacao.calcularNDCX(planoCartesiano.getLargura(), dcx);
                 float ndcy = FuncoesDeNormalizacao.calcularNDCX(planoCartesiano.getAltura(), dcy);
 
-                labelNDCX.setText(String.format("%.4f", ndcx));
-                labelNDCY.setText(String.format("%.4f", ndcy));
+                labelNDCX.setText(String.format("%.6f", ndcx));
+                labelNDCY.setText(String.format("%.6f", ndcy));
 
                 labelDCX.setText(String.valueOf(FuncoesDeNormalizacao.calcularDCX(planoCartesiano.getLargura(), ndcx)));
                 labelDCY.setText(String.valueOf(FuncoesDeNormalizacao.calcularDCY(planoCartesiano.getAltura(), ndcy)));
