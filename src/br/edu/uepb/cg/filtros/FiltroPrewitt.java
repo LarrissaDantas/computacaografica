@@ -1,0 +1,105 @@
+package br.edu.uepb.cg.filtros;
+
+import br.edu.uepb.cg.panels.PanelFiltros;
+import br.edu.uepb.cg.processamentodeimagem.Normalizacao;
+import java.awt.image.BufferedImage;
+
+/**
+ *
+ * @author Douglas Rafael
+ */
+public class FiltroPrewitt {
+
+    PanelFiltros panelFiltros;
+    private int[][] imagemMatriz;
+    private int imagem[][];
+    private int width;
+    private int height;
+
+    public FiltroPrewitt(int imagem[][], int width, int height) {
+        this.imagem = imagem;
+        this.width = width;
+        this.height = height;
+    }
+
+    public FiltroPrewitt() {
+    }
+
+    public int[][] getImagemMatriz() {
+        return imagemMatriz;
+    }
+
+    public void setImagemMatriz(int[][] imagemMatriz) {
+        this.imagemMatriz = imagemMatriz;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public BufferedImage run() {
+        int matrizImagem[][] = new int[getWidth()][getHeight()];
+
+        for (int i = 0; i < getHeight(); i++) {
+            for (int j = 0; j < getWidth(); j++) {
+                // Aproximações em X e Y
+                int aproximacaoX = 0;
+                int aproximacaoY = 0;
+
+                if (((i - 1) >= 0) && ((j + 1) < getHeight())) {
+                    aproximacaoX += imagem[i - 1][j + 1];
+                    aproximacaoY -= imagem[i - 1][j + 1];
+                }
+
+                if ((j + 1) < getHeight()) {
+                    aproximacaoX += imagem[i][j + 1];
+                }
+
+                if (((i + 1) < getWidth()) && ((j + 1) < getHeight())) {
+                    aproximacaoX += imagem[i + 1][j + 1];
+                    aproximacaoY += imagem[i + 1][j + 1];
+                }
+
+                if (((i - 1) >= 0) && ((j - 1) >= 0)) {
+                    aproximacaoX -= imagem[i - 1][j - 1];
+                    aproximacaoY -= imagem[i - 1][j - 1];
+                }
+
+                if ((j - 1) >= 0) {
+                    aproximacaoX -= imagem[i][j - 1];
+                }
+
+                if (((i + 1) < getWidth()) && ((j - 1) >= 0)) {
+                    aproximacaoX -= imagem[i + 1][j - 1];
+                    aproximacaoY += imagem[i + 1][j - 1];
+                }
+
+                if ((i + 1) < getWidth()) {
+                    aproximacaoY += imagem[i + 1][j];
+                }
+
+                if ((i - 1) >= 0) {
+                    aproximacaoY -= imagem[i - 1][j];
+                }
+
+                // Adiciona o novo valor na matriz
+                matrizImagem[i][j] = Math.abs(aproximacaoX) + Math.abs(aproximacaoY);;
+            }
+
+        }
+
+        return Normalizacao.normalizaImage(matrizImagem);
+    }
+}
