@@ -13,7 +13,7 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
     private static PanelMenuFiltros instance;
     private FiltrosEnum tipoAlgoritimo;
 
-    public static PanelMenuFiltros getInstance() {
+    public static synchronized PanelMenuFiltros getInstance() {
         if (instance == null) {
             instance = new PanelMenuFiltros();
         }
@@ -23,7 +23,7 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelMenuFiltros() {
+    private PanelMenuFiltros() {
         initComponents();
     }
 

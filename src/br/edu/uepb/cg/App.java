@@ -1,14 +1,13 @@
 package br.edu.uepb.cg;
 
 import br.edu.uepb.cg.dialog.DialogSobre;
-import static br.edu.uepb.cg.dialog.DialogDesenhaObjetos.listaGLOBAL;
 import br.edu.uepb.cg.dialog.DialogCharts;
-import br.edu.uepb.cg.dialog.DialogDesenhaObjetos;
 import br.edu.uepb.cg.enums.RasterizacaoEnum;
 import br.edu.uepb.cg.panels.PanelGatoArnold;
 import br.edu.uepb.cg.panels.PanelFiltros;
 import br.edu.uepb.cg.panels.PanelHistorgrama;
 import br.edu.uepb.cg.panels.PanelMenu2D;
+import br.edu.uepb.cg.panels.PanelMenu3D;
 import br.edu.uepb.cg.panels.PanelMenuCircunferencia;
 import br.edu.uepb.cg.panels.PanelMenuFiltros;
 import br.edu.uepb.cg.panels.PanelMenuOperacoes;
@@ -19,20 +18,21 @@ import br.edu.uepb.cg.panels.PanelOperacoes;
 import br.edu.uepb.cg.panels.PanelPlanoCartesiano;
 import br.edu.uepb.cg.panels.PanelTranformacoes;
 import br.edu.uepb.cg.retas.Circunferencia;
-import br.edu.uepb.cg.retas.Ponto;
 import br.edu.uepb.cg.retas.Rasterizacao;
 import br.edu.uepb.cg.sistemacoordenadas.FuncoesDeNormalizacao;
+import br.edu.uepb.cg.transformacao2D.Matriz;
 import br.edu.uepb.cg.transformacao2D.SistemaSolar;
 import br.edu.uepb.cg.transformacao2D.Transformacoes2D;
+import br.edu.uepb.cg.transformacao2D.Transformacoes3D;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.util.List;
 import javax.swing.JPanel;
 
 /**
- * Classe que representa a tela inicial da aplicação
+ * Representa a tela inicial da aplicação.
  *
  * @author Douglas Rafael
  */
@@ -44,6 +44,7 @@ public class App extends javax.swing.JFrame {
     private final PanelMenuOperacoes panelMenuOperacoes;
     private final PanelMenuTransformacoes panelMenuTransformacoes;
     private final PanelMenu2D panelMenu2D;
+    private final PanelMenu3D panelMenu3D;
     private final PanelMenuSistemaSolar panelMenuSistemaSolar;
 
     private final PanelFiltros panelFiltros;
@@ -64,6 +65,7 @@ public class App extends javax.swing.JFrame {
         panelHistograma = PanelHistorgrama.getInstance();
         panelArnold = PanelGatoArnold.getInstance();
         panelMenu2D = PanelMenu2D.getInstance();
+        panelMenu3D = PanelMenu3D.getInstance();
         panelMenuSistemaSolar = PanelMenuSistemaSolar.getInstance();
 
         panelFiltros = PanelFiltros.getInstance();
@@ -105,6 +107,7 @@ public class App extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         labelY = new javax.swing.JLabel();
         panelPlanoCartesiano = br.edu.uepb.cg.panels.PanelPlanoCartesiano.getInstance();
+        labelResTela = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         menuItemReta = new javax.swing.JMenuItem();
@@ -129,6 +132,11 @@ public class App extends javax.swing.JFrame {
         setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("assets/images/icon.png")));
         setMinimumSize(new java.awt.Dimension(1080, 720));
         setName("framePrincipal"); // NOI18N
+        addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                actionResized(evt);
+            }
+        });
 
         panelMenuLeft.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         panelMenuLeft.setMinimumSize(new java.awt.Dimension(240, 0));
@@ -219,38 +227,36 @@ public class App extends javax.swing.JFrame {
             .addGroup(panelFooterLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(panelFooterLayout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(labelY)
-                            .addComponent(labelX)))
-                    .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelFooterLayout.createSequentialGroup()
-                            .addGap(10, 10, 10)
-                            .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelFooterLayout.createSequentialGroup()
-                                    .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel1)
-                                        .addComponent(jLabel2))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(labelDCY)
-                                        .addComponent(labelDCX)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelFooterLayout.createSequentialGroup()
-                                    .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel7)
-                                        .addComponent(jLabel6))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(labelNDCY)
-                                        .addComponent(labelNDCX)))))))
+                            .addGroup(panelFooterLayout.createSequentialGroup()
+                                .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelDCY)
+                                    .addComponent(labelDCX)))
+                            .addGroup(panelFooterLayout.createSequentialGroup()
+                                .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel6))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelNDCY)
+                                    .addComponent(labelNDCX)))
+                            .addGroup(panelFooterLayout.createSequentialGroup()
+                                .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addComponent(jLabel9))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(labelY)
+                                    .addComponent(labelX))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelFooterLayout.setVerticalGroup(
@@ -286,21 +292,31 @@ public class App extends javax.swing.JFrame {
                 .addGroup(panelFooterLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel9)
                     .addComponent(labelY))
-                .addContainerGap(344, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panelPlanoCartesiano.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(204, 204, 204)));
         panelPlanoCartesiano.setPreferredSize(new java.awt.Dimension(550, 550));
 
+        labelResTela.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        labelResTela.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelResTela.setText("Tela: 1920 X 1080");
+
         javax.swing.GroupLayout panelPlanoCartesianoLayout = new javax.swing.GroupLayout(panelPlanoCartesiano);
         panelPlanoCartesiano.setLayout(panelPlanoCartesianoLayout);
         panelPlanoCartesianoLayout.setHorizontalGroup(
             panelPlanoCartesianoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 634, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPlanoCartesianoLayout.createSequentialGroup()
+                .addGap(484, 484, 484)
+                .addComponent(labelResTela, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         panelPlanoCartesianoLayout.setVerticalGroup(
             panelPlanoCartesianoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 656, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelPlanoCartesianoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(labelResTela)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
@@ -480,14 +496,19 @@ public class App extends javax.swing.JFrame {
 
         if (!panelFooter.isValid()) {
             setDefaultBox();
+        } else {
+            PanelPlanoCartesiano.getInstance().redesenha();
         }
         changeMenuLeft(panelMenuRasterizacao);
     }//GEN-LAST:event_openMenuReta
 
     private void openMenuCircunferencia(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuCircunferencia
         panelMenuLeft.setVisible(true);
+
         if (!panelFooter.isValid()) {
             setDefaultBox();
+        } else {
+            PanelPlanoCartesiano.getInstance().redesenha();
         }
         changeMenuLeft(panelMenuCircunferencia);
     }//GEN-LAST:event_openMenuCircunferencia
@@ -500,20 +521,7 @@ public class App extends javax.swing.JFrame {
         panelMenuLeft.setVisible(true);
         panelBox.removeAll();
 
-        javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
-        panelBox.setLayout(panelBoxLayout);
-        panelBoxLayout.setHorizontalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelBoxLayout.createSequentialGroup()
-                        .addComponent(panelFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-        );
-
-        panelBoxLayout.setVerticalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(panelFiltros, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
-
+        changePanelCentral(panelFiltros);
         changeMenuLeft(panelMenuFiltros);
     }//GEN-LAST:event_openMenuFiltros
 
@@ -522,20 +530,7 @@ public class App extends javax.swing.JFrame {
         panelMenuLeft.setVisible(true);
         panelBox.removeAll();
 
-        javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
-        panelBox.setLayout(panelBoxLayout);
-        panelBoxLayout.setHorizontalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelBoxLayout.createSequentialGroup()
-                        .addComponent(panelOperacoes, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-        );
-
-        panelBoxLayout.setVerticalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(panelOperacoes, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
-
+        changePanelCentral(panelOperacoes);
         changeMenuLeft(panelMenuOperacoes);
     }//GEN-LAST:event_openMenuOperacoes
 
@@ -544,19 +539,7 @@ public class App extends javax.swing.JFrame {
         panelMenuLeft.setVisible(false);
         panelBox.removeAll();
 
-        javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
-        panelBox.setLayout(panelBoxLayout);
-        panelBoxLayout.setHorizontalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelBoxLayout.createSequentialGroup()
-                        .addComponent(panelArnold, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-        );
-
-        panelBoxLayout.setVerticalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(panelArnold, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
+        changePanelCentral(panelArnold);
     }//GEN-LAST:event_openMenuArnold
 
     private void openMenuTransformacoes(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openMenuTransformacoes
@@ -564,20 +547,7 @@ public class App extends javax.swing.JFrame {
         panelMenuLeft.setVisible(true);
         panelBox.removeAll();
 
-        javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
-        panelBox.setLayout(panelBoxLayout);
-        panelBoxLayout.setHorizontalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelBoxLayout.createSequentialGroup()
-                        .addComponent(panelTransformacoes, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-        );
-
-        panelBoxLayout.setVerticalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(panelTransformacoes, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
-
+        changePanelCentral(panelTransformacoes);
         changeMenuLeft(panelMenuTransformacoes);
     }//GEN-LAST:event_openMenuTransformacoes
 
@@ -586,47 +556,30 @@ public class App extends javax.swing.JFrame {
         panelMenuLeft.setVisible(false);
         panelBox.removeAll();
 
-        javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
-        panelBox.setLayout(panelBoxLayout);
-        panelBoxLayout.setHorizontalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(panelBoxLayout.createSequentialGroup()
-                        .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-        );
-
-        panelBoxLayout.setVerticalGroup(
-                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(panelHistograma, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-        );
+        changePanelCentral(panelHistograma);
     }//GEN-LAST:event_openMenuEqualizacao
 
     private void openTrans2D(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openTrans2D
-//        new DialogDesenhaObjetos(this, true).setVisible(true);
-
-        PanelPlanoCartesiano pPlanoCartersiano = PanelPlanoCartesiano.getInstance();
-        pPlanoCartersiano.redesenha();
-
         panelMenuLeft.setVisible(true);
+
         if (!panelFooter.isValid()) {
             setDefaultBox();
+        } else {
+            PanelPlanoCartesiano.getInstance().redesenha();
         }
         changeMenuLeft(panelMenu2D);
     }//GEN-LAST:event_openTrans2D
 
     private void openTrans3D(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openTrans3D
-//        new DialogDesenhaObjetos(this, true).setVisible(true);
-
         panelMenuLeft.setVisible(true);
+
         if (!panelFooter.isValid()) {
             setDefaultBox();
+        } else {
+            PanelPlanoCartesiano.getInstance().redesenha3D();
         }
 
-        PanelPlanoCartesiano panelPlanoCartesiano3D = PanelPlanoCartesiano.getInstance();
-        panelPlanoCartesiano3D.redesenha();
-        panelPlanoCartesiano3D.desenhaEixoZ();
-
-        changeMenuLeft(panelMenu2D);
+        changeMenuLeft(panelMenu3D);
     }//GEN-LAST:event_openTrans3D
 
     private void openGraficos(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openGraficos
@@ -657,28 +610,61 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_openSistemaSolar
 
     /**
+     * Evento disparado toda vez que a tela é redimensinada. Seta a resolução
+     * da tela atual.
+     *
+     * @param evt
+     */
+    private void actionResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_actionResized
+        PanelPlanoCartesiano p = PanelPlanoCartesiano.getInstance();
+        labelResTela.setText("Tela: " + p.getLargura() + " X " + p.getAltura());
+    }//GEN-LAST:event_actionResized
+
+    /**
+     * Altera o jPanel do menu esquerdo de acordo com o jPanel passado como
+     * parâmetro
+     *
+     * @param panel O jPanel a ser populado
+     */
+    private void changeMenuLeft(JPanel panel) {
+        panelMenuLeft.removeAll();
+        panelMenuLeft.repaint();
+
+        panelMenuLeft.setLayout(new GridLayout());
+        panelMenuLeft.add(panel);
+
+        panelMenuLeft.validate();
+    }
+
+    /**
+     * Altera o jPanel do central adicionando o novo componente passado como
+     * parâmetro.
+     *
+     * @param panel O jPanel a ser populado
+     */
+    private void changePanelCentral(Component component) {
+        javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
+        panelBox.setLayout(panelBoxLayout);
+        panelBoxLayout.setHorizontalGroup(
+                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(panelBoxLayout.createSequentialGroup()
+                                .addComponent(component, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+        );
+        panelBoxLayout.setVerticalGroup(
+                panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(component, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+        );
+    }
+
+    /**
      * Coloca o box principal com o layout default
      */
     private void setDefaultBox() {
         if (!panelFooter.isVisible()) {
             panelBox.removeAll();
 
-            javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
-            panelBox.setLayout(panelBoxLayout);
-            panelBoxLayout.setHorizontalGroup(
-                    panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelBoxLayout.createSequentialGroup()
-                            .addComponent(panelPlanoCartesiano, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(panelFooter, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-            );
-
-            panelBoxLayout.setVerticalGroup(
-                    panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelPlanoCartesiano, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-                    .addComponent(panelFooter, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
-            );
-
+            changePanelCentral(panelPlanoCartesiano);
             panelFooter.setVisible(true);
         }
     }
@@ -718,132 +704,170 @@ public class App extends javax.swing.JFrame {
         });
     }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.ButtonGroup buttonGroup2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem5;
-    private javax.swing.JMenuItem jMenuItem6;
-    private javax.swing.JMenuItem jMenuItem7;
-    private javax.swing.JMenuItem jMenuItem8;
-    private javax.swing.JLabel labelDCX;
-    private javax.swing.JLabel labelDCY;
-    private javax.swing.JLabel labelNDCX;
-    private javax.swing.JLabel labelNDCY;
-    private javax.swing.JLabel labelX;
-    private javax.swing.JLabel labelY;
-    private javax.swing.JMenuBar menuBar;
-    private javax.swing.JMenuItem menuItem2D;
-    private javax.swing.JMenuItem menuItem3D;
-    private javax.swing.JMenuItem menuItemCircuferencia;
-    private javax.swing.JMenuItem menuItemReta;
-    private javax.swing.JMenu menuSobre;
-    private javax.swing.JMenu menuSobre1;
-    private javax.swing.JPanel panelBox;
-    private javax.swing.JPanel panelFooter;
-    private javax.swing.JPanel panelMenuLeft;
-    private static javax.swing.JPanel panelPlanoCartesiano;
-    // End of variables declaration//GEN-END:variables
-
-    /**
-     * Altera o jPanel do menu esquerdo de acordo com o jPanel passado como
-     * parâmetro
-     *
-     * @param panel O jPanel a ser populado
-     */
-    private void changeMenuLeft(JPanel panel) {
-        panelMenuLeft.removeAll();
-        panelMenuLeft.repaint();
-
-        panelMenuLeft.setLayout(new GridLayout());
-        panelMenuLeft.add(panel);
-
-        panelMenuLeft.validate();
-    }
-
     /**
      * Executa o algoritmo de rasterização da reta
      *
      * @param instance Instancia do PanelMenu que o chamou
      */
     public static void runResult(Object instance) {
-        // Limpa o panelBody onde fica o plano cartesiano
-        panelPlanoCartesiano.getGraphics().clearRect(0, 0, panelPlanoCartesiano.getWidth(), panelPlanoCartesiano.getHeight());
-        panelPlanoCartesiano.paint(panelPlanoCartesiano.getGraphics()); // Desenha o plano cartesiano novamente
-
         if (instance instanceof PanelMenuRasterizacao) {
-            PanelMenuRasterizacao rast = (PanelMenuRasterizacao) instance;
-            if (rast.getTipoAlgoritimo().equals(RasterizacaoEnum.DDA)) {
-                Rasterizacao.dda(rast.getPontoInicial(), rast.getPontoFinal(), rast.getColor(), panelPlanoCartesiano, rast.getTextAreaResult());
-            } else if (rast.getTipoAlgoritimo().equals(RasterizacaoEnum.PONTO_MEDIO)) {
-                Rasterizacao.pontoMedio(rast.getPontoInicial(), rast.getPontoFinal(), rast.getColor(), panelPlanoCartesiano, rast.getTextAreaResult());
-            }
+            processaRasterizacaoReta(PanelMenuRasterizacao.getInstance());
         } else if (instance instanceof PanelMenuCircunferencia) {
-            // objeto circ possui o getRaio, getColor, getTextAreaResult e getTipoAlgoritimo
-            PanelMenuCircunferencia circ = (PanelMenuCircunferencia) instance;
+            processaRasterizacaoCircunferencia(PanelMenuCircunferencia.getInstance());
+        } else if (instance instanceof PanelMenu2D) {
+            processaTransformacoes2D(PanelMenu2D.getInstance());
+        } else if (instance instanceof PanelMenu3D) {
+            processaTransformacoes3D(PanelMenu3D.getInstance());
+        }
+    }
 
-            switch (circ.getTipoAlgoritimo()) {
-                case PONTO_MEDIO:
-                    Circunferencia.funcaoPontoMedio((int) circ.getRaioX(), circ.getColor(), panelPlanoCartesiano);
+    /**
+     * Processa o pedido vindo da tela de rasterização de reta.
+     *
+     * @param menu
+     */
+    private static void processaRasterizacaoReta(PanelMenuRasterizacao menu) {
+        Rasterizacao rast = Rasterizacao.getInstance();
+        PanelPlanoCartesiano.getInstance().redesenha();
+
+        if (menu.getTipoAlgoritimo().equals(RasterizacaoEnum.DDA)) {
+            rast.dda(menu.getPontoInicial(), menu.getPontoFinal(), menu.getColor(), menu.getTextAreaResult());
+        } else if (menu.getTipoAlgoritimo().equals(RasterizacaoEnum.PONTO_MEDIO)) {
+            rast.pontoMedio(menu.getPontoInicial(), menu.getPontoFinal(), menu.getColor(), menu.getTextAreaResult());
+        }
+    }
+
+    /**
+     * Processa o pedido vindo da tela de rasterização de circunferência.
+     *
+     * @param menu - Possui o getRaio, getColor, getTipoAlgoritimo
+     */
+    private static void processaRasterizacaoCircunferencia(PanelMenuCircunferencia menu) {
+        Circunferencia circ = Circunferencia.getInstance();
+
+        switch (menu.getTipoAlgoritimo()) {
+            case PONTO_MEDIO:
+                circ.funcaoPontoMedio((int) menu.getRaioX(), menu.getColor());
+                break;
+            case EQUACAO_EXPLICITA:
+                circ.funcaoExplicita((int) menu.getRaioX(), menu.getColor());
+                break;
+            case TRIGONOMETRIA:
+                circ.funcaoTrigonometria((int) menu.getRaioX(), menu.getColor());
+                break;
+            case ELIPSE:
+                circ.funcaoElipse((int) menu.getRaioX(), (int) menu.getRaioY(), menu.getColor());
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Processa o pedido vindo da tela de transformações 2D.
+     *
+     * @param menu
+     */
+    private static void processaTransformacoes2D(PanelMenu2D menu) {
+        if (PanelMenu2D.matrizObjeto != null) {
+            Transformacoes2D trans2D = Transformacoes2D.getInstance();
+
+            /**
+             * Matriz objeto original. Ela é atualizada em cada transformação
+             * aplicada.
+             */
+            double[][] matrizObjeto = PanelMenu2D.matrizObjeto;
+
+            /**
+             * Fatores de translação.
+             */
+            double tx = PanelMenu2D.matrizObjeto[0][0], ty = PanelMenu2D.matrizObjeto[1][0];
+
+            switch (menu.getTipoAlgoritimo()) {
+                case TRANSLACAO:
+                    // Aplica translação
+                    matrizObjeto = trans2D.translacao(matrizObjeto, menu.getValorX(), menu.getValorY());
                     break;
-                case EQUACAO_EXPLICITA:
-                    Circunferencia.funcaoExplicita((int) circ.getRaioX(), circ.getColor(), panelPlanoCartesiano);
+                case ESCALA:
+                    // Aplica escala de acordo com Sx e Sy
+                    matrizObjeto = trans2D.escala(matrizObjeto, menu.getValorX(), menu.getValorY());
                     break;
-                case TRIGONOMETRIA:
-                    Circunferencia.funcaoTrigonometria((int) circ.getRaioX(), circ.getColor(), panelPlanoCartesiano);
+                case ROTACAO:
+                    // Aplica rotação de acordo com o ângulo
+                    matrizObjeto = trans2D.rotacao(matrizObjeto, menu.getAngulo());
                     break;
-                case ELIPSE:
-                    Circunferencia.funcaoElipse((int) circ.getRaioX(), (int) circ.getRaioY(), circ.getColor(), panelPlanoCartesiano);
+                case REFLEXAO:
+                    // Aplica reflexão de acordo com o eixo selecionado
+                    matrizObjeto = trans2D.reflexao(matrizObjeto, menu.getEixo());
+                    break;
+                case CISALHAMENTO:
+                    // Aplica cisalhamento de acordo com o valor de a e b
+                    matrizObjeto = trans2D.cisalhamento(matrizObjeto, menu.getValorX(), menu.getValorY());
+                    break;
+                case COMPOSTA:
+                    matrizObjeto = trans2D.composta(menu.listaDeTransformacoes, matrizObjeto);
+                    break;
                 default:
                     break;
             }
-        } else if (instance instanceof PanelMenu2D) {
-            PanelMenu2D menu2D = (PanelMenu2D) instance;
-            if (listaGLOBAL != null) {
-                switch (menu2D.getTipoAlgoritimo()) {
-                    case TRANSLACAO: {
-                        List<Ponto> listaPontos = DialogDesenhaObjetos.getLista();
-                        Transformacoes2D.translacao(listaPontos, menu2D.getValorX(), menu2D.getValorY(), PanelPlanoCartesiano.getInstance(), menu2D.getColor());
+
+            // Desenha o objeto
+            PanelPlanoCartesiano.getInstance().drawObjeto2D(matrizObjeto, menu.getColor());
+        }
+    }
+
+    /**
+     * Processa o pedido vindo da tela de transformações 3D.
+     *
+     * @param menu
+     */
+    private static void processaTransformacoes3D(PanelMenu3D menu) {
+        if (PanelMenu3D.matrizObjeto3D != null) {
+            Transformacoes3D trans3D = Transformacoes3D.getInstance();
+
+            /**
+             * Matriz objeto original. Ela é atualizada em cada transformação
+             * aplicada.
+             */
+            double[][] matrizObjeto3D = PanelMenu3D.matrizObjeto3D;
+
+            /**
+             * Fatores de translação.
+             */
+            double tx = PanelMenu3D.matrizObjeto3D[0][0], ty = PanelMenu3D.matrizObjeto3D[1][0];
+
+            switch (menu.getTipoAlgoritimo()) {
+                case TRANSLACAO:
+                    // Aplica translação
+                    matrizObjeto3D = trans3D.translacao(matrizObjeto3D, menu.getValorX(), menu.getValorY(), menu.getValorZ());
+                    break;
+                    case ESCALA:
+                        // Aplica escala de acordo com Sx e Sy
+                        matrizObjeto3D = trans3D.escala(matrizObjeto3D, menu.getValorX(), menu.getValorY(), menu.getValorZ());
                         break;
-                    }
-                    case ESCALA: {
-                        List<Ponto> listaPontos = DialogDesenhaObjetos.getLista();
-                        Transformacoes2D.escala(listaPontos, menu2D.getValorX(), menu2D.getValorY(), PanelPlanoCartesiano.getInstance(), menu2D.getColor());
+                    case ROTACAO:
+                        // Aplica rotação de acordo com o ângulo
+                        matrizObjeto3D = trans3D.rotacao(matrizObjeto3D, menu.getAngulo(), menu.getEixo());
                         break;
-                    }
-                    case ROTACAO: {
-                        List<Ponto> listaPontos = DialogDesenhaObjetos.getLista();
-                        Transformacoes2D.rotacao(listaPontos, (int) menu2D.getAngulo(), PanelPlanoCartesiano.getInstance(), menu2D.getColor());
+                    case REFLEXAO:
+                        // Aplica reflexão de acordo com o eixo selecionado
+                        matrizObjeto3D = trans3D.reflexao(matrizObjeto3D, menu.getEixo());
                         break;
-                    }
-                    case REFLEXAO: {
-                        List<Ponto> listaPontos = DialogDesenhaObjetos.getLista();
-                        Transformacoes2D.reflexao(listaPontos, menu2D.getEixo(), PanelPlanoCartesiano.getInstance(), menu2D.getColor());
+                    case CISALHAMENTO:
+                        // Aplica cisalhamento de acordo com o valor de a e b
+                        matrizObjeto3D = trans3D.cisalhamento(matrizObjeto3D, menu.getValorX(), menu.getAlignmentY(), menu.getEixo());
                         break;
-                    }
-                    case CISALHAMENTO: {
-                        List<Ponto> listaPontos = DialogDesenhaObjetos.getLista();
-                        Transformacoes2D.cisalhamento(listaPontos, menu2D.getValorX(), menu2D.getValorY(), PanelPlanoCartesiano.getInstance(), menu2D.getColor());
+                    case COMPOSTA:
+                        matrizObjeto3D = trans3D.composta(menu.listaDeTransformacoes, matrizObjeto3D);
                         break;
-                    }
-                    default:
-                        break;
-                }
+                default:
+                    break;
             }
+
+            // Desenha o objeto
+            Matriz.printMatriz(matrizObjeto3D, "Result");
+
+            // Desenha o objeto
+            PanelPlanoCartesiano.getInstance().drawObjeto3D(matrizObjeto3D, menu.getColor());
         }
     }
 
@@ -880,4 +904,46 @@ public class App extends javax.swing.JFrame {
             }
         });
     }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup buttonGroup1;
+    private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
+    private javax.swing.JMenuItem jMenuItem7;
+    private javax.swing.JMenuItem jMenuItem8;
+    private javax.swing.JLabel labelDCX;
+    private javax.swing.JLabel labelDCY;
+    private javax.swing.JLabel labelNDCX;
+    private javax.swing.JLabel labelNDCY;
+    private javax.swing.JLabel labelResTela;
+    private javax.swing.JLabel labelX;
+    private javax.swing.JLabel labelY;
+    private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem menuItem2D;
+    private javax.swing.JMenuItem menuItem3D;
+    private javax.swing.JMenuItem menuItemCircuferencia;
+    private javax.swing.JMenuItem menuItemReta;
+    private javax.swing.JMenu menuSobre;
+    private javax.swing.JMenu menuSobre1;
+    private javax.swing.JPanel panelBox;
+    private javax.swing.JPanel panelFooter;
+    private javax.swing.JPanel panelMenuLeft;
+    private static javax.swing.JPanel panelPlanoCartesiano;
+    // End of variables declaration//GEN-END:variables
 }

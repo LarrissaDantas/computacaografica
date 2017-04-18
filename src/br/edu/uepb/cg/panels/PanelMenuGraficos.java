@@ -13,7 +13,7 @@ public class PanelMenuGraficos extends javax.swing.JPanel {
     private static PanelMenuGraficos instance;
     private GraficosEnum tipoAlgoritimo;
 
-    public static PanelMenuGraficos getInstance() {
+    public static synchronized PanelMenuGraficos getInstance() {
         if (instance == null) {
             instance = new PanelMenuGraficos();
         }
@@ -23,7 +23,7 @@ public class PanelMenuGraficos extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelMenuGraficos() {
+    private PanelMenuGraficos() {
         initComponents();
     }
 

@@ -33,7 +33,8 @@ public final class SistemaSolar {
     private final int centroX;
     private final int centroY;
 
-    private List<Ponto> pontosOrbita;
+    private final List<Ponto> pontosOrbita;
+    private List<Ponto> listaDePontos;
 
     public SistemaSolar() {
         planoCartesiano = PanelPlanoCartesiano.getInstance();
@@ -52,7 +53,7 @@ public final class SistemaSolar {
          * Desenha a orbita e pega os seus pontos
          */
         g.setColor(Color.RED);
-        Circunferencia.funcaoElipse(200, 100, Color.RED, planoCartesiano);
+        listaDePontos = Circunferencia.getInstance().funcaoElipse(200, 100, Color.RED);
         preparaPonto();
 
         /**
@@ -69,6 +70,7 @@ public final class SistemaSolar {
         g.setColor(Color.YELLOW);
         sol = new Ellipse2D.Double(centroX - RAIO_SOL / 2, centroY - RAIO_SOL / 2, RAIO_SOL, RAIO_SOL);
         g.fill(sol);
+        
     }
 
     /**
@@ -78,7 +80,7 @@ public final class SistemaSolar {
         g.setColor(Color.BLUE);
         // Posição inicial da terra (0,200)
         terra = new Ellipse2D.Double(centroX - RAIO_TERRA / 2, centroY - RAIO_TERRA / 2, RAIO_TERRA, RAIO_TERRA);
-        g.draw(terra);
+        g.fill(terra);
     }
 
     private void desenhaOrbita() {
@@ -97,7 +99,7 @@ public final class SistemaSolar {
         // Pega a lista de pontos da órbita da metade de cima
         for (int i = 200; i >= -200; i--) {
             for (int j = 0; j <= 100; j++) {
-                if (pontoExiste(new Ponto(centroX + i, centroY + j, 0), Circunferencia.listaPontos)) {
+                if (pontoExiste(new Ponto((double) (centroX + i), (double) (centroY + j)), listaDePontos)) {
                     pontosOrbita.add(new Ponto(centroX + i, centroY + j, 0));
                 }
             }
@@ -106,7 +108,7 @@ public final class SistemaSolar {
         // Pega a lista de pontos da órbita da metade de baixo
         for (int i = -200; i <= 200; i++) {
             for (int j = 0; j >= -100; j--) {
-                if (pontoExiste(new Ponto(centroX + i, centroY + j, 0), Circunferencia.listaPontos)) {
+                if (pontoExiste(new Ponto((double) (centroX + i), (double) (centroY + j)), listaDePontos)) {
                     pontosOrbita.add(new Ponto(centroX + i, centroY + j, 0));
                 }
             }
@@ -123,7 +125,7 @@ public final class SistemaSolar {
 
             @Override
             public void run() {
-                for (Ponto p : pontosOrbita) {
+                pontosOrbita.forEach((p) -> {
                     try {
                         refresh();
                         terra.setFrame(p.getX() - RAIO_TERRA / 2, p.getY() - RAIO_TERRA / 2, RAIO_TERRA, RAIO_TERRA);
@@ -133,17 +135,16 @@ public final class SistemaSolar {
                         sleep(50);
                         i += 1;
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        System.err.println(e.getMessage());
                     }
-                }
+                });
             }
         };
         threadAnimation.start();
     }
 
     /**
-     * Verifica se o dado um ponto ele esta contido na lista de ponto passada
-     * como parametro
+     * Verifica se ponto estar contido na lista de ponto passada como parametro.
      *
      * @param p
      * @param lista

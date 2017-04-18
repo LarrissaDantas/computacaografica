@@ -30,7 +30,7 @@ public class PanelTranformacoes extends javax.swing.JPanel {
     private int imgHeight;
     private int imgValorMaximo;
 
-    public static PanelTranformacoes getInstance() {
+    public static synchronized PanelTranformacoes getInstance() {
         if (instance == null) {
             instance = new PanelTranformacoes();
         }
@@ -40,7 +40,7 @@ public class PanelTranformacoes extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelTranformacoes() {
+    private PanelTranformacoes() {
         initComponents();
     }
 

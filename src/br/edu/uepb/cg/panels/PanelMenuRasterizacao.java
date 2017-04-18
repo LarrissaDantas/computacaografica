@@ -20,18 +20,18 @@ public class PanelMenuRasterizacao extends javax.swing.JPanel {
     private Color color;
     private RasterizacaoEnum tipoAlgoritimo;
 
-    public static PanelMenuRasterizacao getInstance() {
+    /**
+     * Construtor
+     */
+    private PanelMenuRasterizacao() {
+        initComponents();
+    }
+    
+    public static synchronized PanelMenuRasterizacao getInstance() {
         if (instance == null) {
             instance = new PanelMenuRasterizacao();
         }
         return instance;
-    }
-
-    /**
-     * Construtor
-     */
-    public PanelMenuRasterizacao() {
-        initComponents();
     }
 
     public Ponto getPontoInicial() {
@@ -139,13 +139,13 @@ public class PanelMenuRasterizacao extends javax.swing.JPanel {
         jLabel3.setText("Final:");
 
         pontoInicialX.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        pontoInicialX.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.1f));
+        pontoInicialX.setModel(new javax.swing.SpinnerNumberModel(0.0d, null, null, 1.0d));
         pontoInicialX.setMaximumSize(new java.awt.Dimension(30, 25));
         pontoInicialX.setMinimumSize(new java.awt.Dimension(30, 25));
         pontoInicialX.setPreferredSize(new java.awt.Dimension(30, 25));
 
         pontoInicialY.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        pontoInicialY.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.1f));
+        pontoInicialY.setModel(new javax.swing.SpinnerNumberModel(0.0d, null, null, 1.0d));
         pontoInicialY.setMaximumSize(new java.awt.Dimension(30, 25));
         pontoInicialY.setMinimumSize(new java.awt.Dimension(30, 25));
         pontoInicialY.setPreferredSize(new java.awt.Dimension(30, 25));
@@ -157,13 +157,13 @@ public class PanelMenuRasterizacao extends javax.swing.JPanel {
         jLabel5.setText("Y");
 
         pontoFinalX.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        pontoFinalX.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.1f));
+        pontoFinalX.setModel(new javax.swing.SpinnerNumberModel(0.0d, null, null, 1.0d));
         pontoFinalX.setMaximumSize(new java.awt.Dimension(30, 25));
         pontoFinalX.setMinimumSize(new java.awt.Dimension(30, 25));
         pontoFinalX.setPreferredSize(new java.awt.Dimension(30, 25));
 
         pontoFinalY.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        pontoFinalY.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 0.1f));
+        pontoFinalY.setModel(new javax.swing.SpinnerNumberModel(0.0d, null, null, 1.0d));
         pontoFinalY.setMaximumSize(new java.awt.Dimension(30, 25));
         pontoFinalY.setMinimumSize(new java.awt.Dimension(30, 25));
         pontoFinalY.setPreferredSize(new java.awt.Dimension(30, 25));
@@ -321,8 +321,8 @@ public class PanelMenuRasterizacao extends javax.swing.JPanel {
         setColor(panelCor.getBackground());
 
         // Seta as coordenadas dos pontos e seta no obejto Ponto
-        setPontoInicial(new Ponto((float) pontoInicialX.getValue(), (float) pontoInicialY.getValue()));
-        setPontoFinal(new Ponto((float) pontoFinalX.getValue(), (float) pontoFinalY.getValue()));
+        setPontoInicial(new Ponto((double) pontoInicialX.getValue(), (double) pontoInicialY.getValue()));
+        setPontoFinal(new Ponto((double) pontoFinalX.getValue(), (double) pontoFinalY.getValue()));
 
         // Seta o tipo de algoritmo selecionado
         if (rbDDA.isSelected()) {

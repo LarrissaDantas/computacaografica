@@ -11,7 +11,7 @@ public class PanelMenuSistemaSolar extends javax.swing.JPanel {
 
     private static PanelMenuSistemaSolar instance;
 
-    public static PanelMenuSistemaSolar getInstance() {
+    public static synchronized PanelMenuSistemaSolar getInstance() {
         if (instance == null) {
             instance = new PanelMenuSistemaSolar();
         }
@@ -21,7 +21,7 @@ public class PanelMenuSistemaSolar extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelMenuSistemaSolar() {
+    private PanelMenuSistemaSolar() {
         initComponents();
     }
 

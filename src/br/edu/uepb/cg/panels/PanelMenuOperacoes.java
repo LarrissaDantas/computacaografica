@@ -13,7 +13,7 @@ public class PanelMenuOperacoes extends javax.swing.JPanel {
     private static PanelMenuOperacoes instance;
     private OperacoesEnum tipoAlgoritimo;
 
-    public static PanelMenuOperacoes getInstance() {
+    public static synchronized PanelMenuOperacoes getInstance() {
         if (instance == null) {
             instance = new PanelMenuOperacoes();
         }
@@ -23,7 +23,7 @@ public class PanelMenuOperacoes extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelMenuOperacoes() {
+    private PanelMenuOperacoes() {
         initComponents();
     }
 

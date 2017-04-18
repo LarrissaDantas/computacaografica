@@ -108,4 +108,15 @@ public class GatoArnold {
             }
         }
     }
+
+    public boolean isParada() {
+        for (int i = 0; i < imagem.length; i++) {
+            for (int j = 0; j < imagem[i].length; j++) {
+                if (imagem[i][j] != imagemArnold[i][j]) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

@@ -14,7 +14,7 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
     private TransformacoesImagemEnum tipoAlgoritimo;
     private float dados;
 
-    public static PanelMenuTransformacoes getInstance() {
+    public static synchronized PanelMenuTransformacoes getInstance() {
         if (instance == null) {
             instance = new PanelMenuTransformacoes();
         }
@@ -24,7 +24,7 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelMenuTransformacoes() {
+    private PanelMenuTransformacoes() {
         initComponents();
         panelConfigGamma.setVisible(false);
     }

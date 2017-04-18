@@ -7,72 +7,49 @@ package br.edu.uepb.cg.retas;
  */
 public class Ponto {
 
-    private float x;
-    private float y;
-    private float z;
+    private double x;
+    private double y;
+    private double z;
 
-    public Ponto(float x, float y) {
+    public Ponto(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public Ponto(float x, float y, float z) {
+    public Ponto(double x, double y, double z) {
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public float getX() {
+    public double getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(double x) {
         this.x = x;
     }
 
-    public float getY() {
+    public double getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(double y) {
         this.y = y;
     }
 
     public void swap() {
-        float temp = x;
+        double temp = x;
         setX(y);
         setY(temp);
     }
 
-    public float getZ() {
+    public double getZ() {
         return z;
     }
 
-    public void setZ(float z) {
+    public void setZ(double z) {
         this.z = z;
-    }
-
-    @Override
-    public int hashCode() {
-        int hash = 5;
-        return hash;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Ponto)) {
-            return false;
-        }
-
-        Ponto other = (Ponto) obj;
-
-        if (Float.floatToIntBits(this.x) == Float.floatToIntBits(other.x)) {
-            return false;
-        }
-        if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
-            return false;
-        }
-        return true;
     }
 
     @Override

@@ -19,19 +19,19 @@ public class PanelMenuCircunferencia extends javax.swing.JPanel {
     private Color color;
     private CircunferenciaEnum tipoAlgoritimo;
 
-    public static PanelMenuCircunferencia getInstance() {
+    /**
+     * Construtor
+     */
+    private PanelMenuCircunferencia() {
+        initComponents();
+        valorRaioY.setVisible(false);
+    }
+    
+    public static synchronized PanelMenuCircunferencia getInstance() {
         if (instance == null) {
             instance = new PanelMenuCircunferencia();
         }
         return instance;
-    }
-
-    /**
-     * Construtor
-     */
-    public PanelMenuCircunferencia() {
-        initComponents();
-        valorRaioY.setVisible(false);
     }
 
     public float getRaioX() {

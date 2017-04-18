@@ -1,23 +1,27 @@
 package br.edu.uepb.cg.panels;
 
 import br.edu.uepb.cg.App;
-import static br.edu.uepb.cg.dialog.DialogDesenhaObjetos.listaGLOBAL;
 import br.edu.uepb.cg.enums.TransformacoesEnum;
 import br.edu.uepb.cg.retas.Ponto;
+import br.edu.uepb.cg.transformacao2D.Transformacoes2D;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
+import java.util.Stack;
+import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
+import javax.swing.JOptionPane;
 
 /**
  * Representa o menu para manipulação das transformações 2D
  *
- * @author Douglas Rafael e Geovannio
+ * @author Douglas Rafael
+ * @author Geovannio Vinhas
  */
-public class PanelMenu2D extends javax.swing.JPanel {
+public final class PanelMenu2D extends javax.swing.JPanel {
 
     private static PanelMenu2D instance;
+    public static double[][] matrizObjeto;
+    public Stack<double[][]> listaDeTransformacoes;
 
     private Rectangle2D.Double rect;
     private double valorX, valorY; // usando na translacao, escala, cisalhamento
@@ -27,8 +31,9 @@ public class PanelMenu2D extends javax.swing.JPanel {
 
     private Color color;
     private TransformacoesEnum tipoAlgoritimo;
+    private final DefaultListModel<String> modelList;
 
-    public static PanelMenu2D getInstance() {
+    public static synchronized PanelMenu2D getInstance() {
         if (instance == null) {
             instance = new PanelMenu2D();
         }
@@ -39,9 +44,12 @@ public class PanelMenu2D extends javax.swing.JPanel {
      * Construtor
      */
     private PanelMenu2D() {
+        modelList = new DefaultListModel();
+        listaDeTransformacoes = new Stack<>();
+
         initComponents();
 
-        setColor(Color.BLUE);
+        this.setColor(Color.BLUE);
         panelDados2.setVisible(false);
     }
 
@@ -142,14 +150,22 @@ public class PanelMenu2D extends javax.swing.JPanel {
         panelObjeto = new javax.swing.JPanel();
         spinnerX = new javax.swing.JSpinner();
         spinnerY = new javax.swing.JSpinner();
-        radioRect = new javax.swing.JRadioButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        spinnerPY = new javax.swing.JSpinner();
+        spinnerPX = new javax.swing.JSpinner();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
         btResolve1 = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator3 = new javax.swing.JSeparator();
+        brAddLista = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listTransformacoes = new javax.swing.JList<>();
+        btResolveCompostas = new javax.swing.JButton();
 
-        setMaximumSize(new java.awt.Dimension(240, 32767));
-        setMinimumSize(new java.awt.Dimension(240, 0));
+        setMaximumSize(new java.awt.Dimension(240, 779));
+        setMinimumSize(new java.awt.Dimension(240, 779));
         setPreferredSize(new java.awt.Dimension(240, 779));
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Tipos de Transformações"));
@@ -202,27 +218,26 @@ public class PanelMenu2D extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(rbRotacao)
                     .addComponent(rbTranslacao)
+                    .addComponent(rbRotacao)
                     .addComponent(rbEscala)
                     .addComponent(rbReflexao)
                     .addComponent(rbCisalhamento))
-                .addContainerGap(113, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(rbTranslacao)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbEscala)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbRotacao)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbReflexao)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(rbCisalhamento)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rbCisalhamento))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Cor do Objeto"));
@@ -273,6 +288,9 @@ public class PanelMenu2D extends javax.swing.JPanel {
         });
 
         panelDados1.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados"));
+        panelDados1.setMaximumSize(new java.awt.Dimension(220, 80));
+        panelDados1.setMinimumSize(new java.awt.Dimension(220, 80));
+        panelDados1.setPreferredSize(new java.awt.Dimension(220, 80));
 
         valorDado1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         valorDado1.setModel(new javax.swing.SpinnerNumberModel(0.0d, null, null, 1.0d));
@@ -298,7 +316,7 @@ public class PanelMenu2D extends javax.swing.JPanel {
             panelDados1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDados1Layout.createSequentialGroup()
                 .addGap(31, 31, 31)
-                .addComponent(valorDado1, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                .addComponent(valorDado1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(27, 27, 27)
                 .addComponent(valorDado2, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
@@ -322,7 +340,7 @@ public class PanelMenu2D extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panelDados2.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados"));
+        panelDados2.setBorder(javax.swing.BorderFactory.createTitledBorder("Eixo"));
 
         buttonGroupReflexao.add(jRadioButton1);
         jRadioButton1.setSelected(true);
@@ -357,61 +375,91 @@ public class PanelMenu2D extends javax.swing.JPanel {
                 .addComponent(jRadioButton3))
         );
 
-        panelObjeto.setBorder(javax.swing.BorderFactory.createTitledBorder("Criar Objeto"));
+        panelObjeto.setBorder(javax.swing.BorderFactory.createTitledBorder("Criar Objeto 2D"));
+        panelObjeto.setMaximumSize(new java.awt.Dimension(220, 106));
 
         spinnerX.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerX.setModel(new javax.swing.SpinnerNumberModel(100, null, null, 1));
+        spinnerX.setModel(new javax.swing.SpinnerNumberModel(100.0d, null, null, 1.0d));
+        spinnerX.setToolTipText("Largura do objeto...");
         spinnerX.setMaximumSize(new java.awt.Dimension(30, 25));
         spinnerX.setMinimumSize(new java.awt.Dimension(30, 25));
         spinnerX.setPreferredSize(new java.awt.Dimension(30, 25));
 
         spinnerY.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerY.setModel(new javax.swing.SpinnerNumberModel(100, null, null, 1));
-        spinnerY.setMaximumSize(new java.awt.Dimension(30, 25));
-        spinnerY.setMinimumSize(new java.awt.Dimension(30, 25));
-        spinnerY.setPreferredSize(new java.awt.Dimension(30, 25));
+        spinnerY.setModel(new javax.swing.SpinnerNumberModel(100.0d, null, null, 1.0d));
+        spinnerY.setToolTipText("Altura do objeto...");
+        spinnerY.setMaximumSize(new java.awt.Dimension(63, 25));
+        spinnerY.setMinimumSize(new java.awt.Dimension(63, 25));
+        spinnerY.setPreferredSize(new java.awt.Dimension(63, 25));
 
-        buttonGroupObjetos.add(radioRect);
-        radioRect.setSelected(true);
-        radioRect.setText("Retângulo");
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel1.setText("W");
 
-        jLabel1.setText("Largura");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel2.setText("H");
 
-        jLabel2.setText("Altura");
+        spinnerPY.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        spinnerPY.setModel(new javax.swing.SpinnerNumberModel(30.0d, null, null, 1.0d));
+        spinnerPY.setToolTipText("Coordenada de Y...");
+        spinnerPY.setMaximumSize(new java.awt.Dimension(30, 25));
+        spinnerPY.setMinimumSize(new java.awt.Dimension(30, 25));
+        spinnerPY.setPreferredSize(new java.awt.Dimension(30, 25));
+
+        spinnerPX.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        spinnerPX.setModel(new javax.swing.SpinnerNumberModel(50.0d, null, null, 1.0d));
+        spinnerPX.setToolTipText("Coordenada de X...");
+        spinnerPX.setMaximumSize(new java.awt.Dimension(30, 25));
+        spinnerPX.setMinimumSize(new java.awt.Dimension(30, 25));
+        spinnerPX.setPreferredSize(new java.awt.Dimension(30, 25));
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel3.setText("X");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLabel4.setText("Y");
 
         javax.swing.GroupLayout panelObjetoLayout = new javax.swing.GroupLayout(panelObjeto);
         panelObjeto.setLayout(panelObjetoLayout);
         panelObjetoLayout.setHorizontalGroup(
             panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelObjetoLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(spinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(panelObjetoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(radioRect)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spinnerPX, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                    .addComponent(spinnerX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelObjetoLayout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(jLabel4))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelObjetoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(spinnerY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(spinnerPY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         panelObjetoLayout.setVerticalGroup(
             panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelObjetoLayout.createSequentialGroup()
+            .addGroup(panelObjetoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(radioRect)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
-                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(spinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(spinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(spinnerPX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(spinnerPY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         btResolve1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -423,6 +471,41 @@ public class PanelMenu2D extends javax.swing.JPanel {
             }
         });
 
+        brAddLista.setText("Adicionar à Lista Trans. Composta");
+        brAddLista.setToolTipText("Adicione as transformações na ordem que desejar. Depois clique em: Aplicar Transformações Compostas...");
+        brAddLista.setMaximumSize(new java.awt.Dimension(151, 23));
+        brAddLista.setMinimumSize(new java.awt.Dimension(151, 23));
+        brAddLista.setPreferredSize(new java.awt.Dimension(61, 30));
+        brAddLista.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addListaTransformacoes(evt);
+            }
+        });
+
+        listTransformacoes.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista Para Transformações Compostas"));
+        listTransformacoes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        listTransformacoes.setForeground(new java.awt.Color(102, 102, 102));
+        listTransformacoes.setModel(modelList);
+        listTransformacoes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        listTransformacoes.setToolTipText("Duplo clique para remover da lista...");
+        listTransformacoes.setDropMode(javax.swing.DropMode.ON_OR_INSERT);
+        listTransformacoes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                removeTransformacao(evt);
+            }
+        });
+        jScrollPane1.setViewportView(listTransformacoes);
+
+        btResolveCompostas.setText("Aplicar Transformações Compostas");
+        btResolveCompostas.setMaximumSize(new java.awt.Dimension(151, 23));
+        btResolveCompostas.setMinimumSize(new java.awt.Dimension(151, 23));
+        btResolveCompostas.setPreferredSize(new java.awt.Dimension(61, 30));
+        btResolveCompostas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aplicaTransCompostas(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -430,14 +513,18 @@ public class PanelMenu2D extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panelDados1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btResolve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panelDados2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelObjeto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator2)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btResolve1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator1))
+                    .addComponent(jSeparator3)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelDados2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btResolve, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(brAddLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btResolveCompostas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelDados1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -449,9 +536,9 @@ public class PanelMenu2D extends javax.swing.JPanel {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btResolve1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelDados1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -459,7 +546,15 @@ public class PanelMenu2D extends javax.swing.JPanel {
                 .addComponent(panelDados2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btResolve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(111, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(brAddLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btResolveCompostas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -520,7 +615,11 @@ public class PanelMenu2D extends javax.swing.JPanel {
             setValorY((double) valorDado2.getValue());
         }
 
-        App.runResult(this);
+        if (matrizObjeto == null) {
+            JOptionPane.showMessageDialog(this.getRootPane(), "Não há objeto no plano cartesiano!\nPor favor, desenhe o objeto primeiro...", "Aplicar Transformação?", JOptionPane.WARNING_MESSAGE);
+        } else {
+            App.runResult(this);
+        }
     }//GEN-LAST:event_aplicaTransformacao
 
     /**
@@ -531,7 +630,7 @@ public class PanelMenu2D extends javax.swing.JPanel {
     private void selectedTransformacao(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectedTransformacao
         panelDados1.setVisible(true);
         panelDados2.setVisible(false);
-        
+
         valorDado1.setValue(0D);
         valorDado2.setValue(0D);
 
@@ -553,33 +652,89 @@ public class PanelMenu2D extends javax.swing.JPanel {
         desenharObjeto();
     }//GEN-LAST:event_aplicarObjeto
 
+    private void addListaTransformacoes(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListaTransformacoes
+        Transformacoes2D trans2D = Transformacoes2D.getInstance();
+        /**
+         * Seta o tipo de algoritmo selecionado e seus parametros necessários
+         */
+        if (rbTranslacao.isSelected()) {
+            modelList.addElement("- Translação: Tx=" + valorDado1.getValue() + ", Ty=" + valorDado2.getValue());
+            listaDeTransformacoes.push(trans2D.geraMatrizTranslacao((double) valorDado1.getValue(), (double) valorDado2.getValue()));
+        } else if (rbEscala.isSelected()) {
+            modelList.addElement("- Escala: Sx=" + valorDado1.getValue() + ", Sy=" + valorDado2.getValue());
+            listaDeTransformacoes.push(trans2D.geraMatrizEscala((double) valorDado1.getValue(), (double) valorDado2.getValue()));
+        } else if (rbRotacao.isSelected()) {
+            modelList.addElement("- Rotação: Θ=" + valorDado1.getValue());
+            listaDeTransformacoes.push(trans2D.geraMatrizRotacao((double) valorDado1.getValue()));
+        } else if (rbReflexao.isSelected()) {
+            if (jRadioButton1.isSelected()) {
+                modelList.addElement("- Reflexão em X");
+                listaDeTransformacoes.push(trans2D.geraMatrizReflexao("x"));
+            } else if (jRadioButton2.isSelected()) {
+                modelList.addElement("- Reflexão em Y");
+                listaDeTransformacoes.push(trans2D.geraMatrizReflexao("y"));
+            } else if (jRadioButton3.isSelected()) {
+                modelList.addElement("- Reflexão em XY");
+                listaDeTransformacoes.push(trans2D.geraMatrizReflexao("xy"));
+            }
+        } else if (rbCisalhamento.isSelected()) {
+            modelList.addElement("- Cisalhamento: Cx=" + valorDado1.getValue() + ", Cy=" + valorDado2.getValue());
+            listaDeTransformacoes.push(trans2D.geraMatrizCisalhamento((double) valorDado1.getValue(), (double) valorDado2.getValue()));
+        }
+    }//GEN-LAST:event_addListaTransformacoes
+
+    private void removeTransformacao(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeTransformacao
+        if (evt.getClickCount() == 2) {
+            int indexItem = listTransformacoes.getSelectedIndex();
+            modelList.remove(indexItem);
+            listaDeTransformacoes.remove(indexItem);
+        }
+    }//GEN-LAST:event_removeTransformacao
+
+    private void aplicaTransCompostas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplicaTransCompostas
+        if (!listaDeTransformacoes.isEmpty()) {
+            setTipoAlgoritimo(TransformacoesEnum.COMPOSTA);
+            App.runResult(this);
+        } else {
+            JOptionPane.showMessageDialog(this.getRootPane(), "Você não adicionou nenhum tipo de transformação na lista.\nPor favor, adicione e tente novamente...", "Aplicar Transformações Compostas?", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_aplicaTransCompostas
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton brAddLista;
     private javax.swing.JButton btResolve;
     private javax.swing.JButton btResolve1;
+    private javax.swing.JButton btResolveCompostas;
     private javax.swing.ButtonGroup buttonGroupAlgoritmos;
     private javax.swing.ButtonGroup buttonGroupObjetos;
     private javax.swing.ButtonGroup buttonGroupReflexao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lbDado1;
     private javax.swing.JLabel lbDado2;
+    private javax.swing.JList<String> listTransformacoes;
     private javax.swing.JPanel panelCor;
     private javax.swing.JPanel panelDados1;
     private javax.swing.JPanel panelDados2;
     private javax.swing.JPanel panelObjeto;
-    private javax.swing.JRadioButton radioRect;
     private javax.swing.JRadioButton rbCisalhamento;
     private javax.swing.JRadioButton rbEscala;
     private javax.swing.JRadioButton rbReflexao;
     private javax.swing.JRadioButton rbRotacao;
     private javax.swing.JRadioButton rbTranslacao;
+    private javax.swing.JSpinner spinnerPX;
+    private javax.swing.JSpinner spinnerPY;
     private javax.swing.JSpinner spinnerX;
     private javax.swing.JSpinner spinnerY;
     private javax.swing.JSpinner valorDado1;
@@ -587,32 +742,43 @@ public class PanelMenu2D extends javax.swing.JPanel {
     // End of variables declaration//GEN-END:variables
 
     private void desenharObjeto() {
-        listaGLOBAL = new ArrayList<>();
 
-        if (radioRect.isSelected()) {
-            int width = (int) spinnerX.getValue();
-            int height = (int) spinnerY.getValue();
+        double width = (double) spinnerX.getValue();
+        double height = (double) spinnerY.getValue();
 
-            listaGLOBAL.add(new Ponto(0, 0)); // A
-            listaGLOBAL.add(new Ponto(width, 0)); // B
-            listaGLOBAL.add(new Ponto(width, height)); // C
-            listaGLOBAL.add(new Ponto(0, height)); // D
+        /**
+         * Pegando as coordenadas iniciais do objeto
+         */
+        double px = (double) spinnerPX.getValue();
+        double py = (double) spinnerPY.getValue();
 
-            /**
-             * Pega a instancia do plano cartesiano para limpa-lo
-             */
-            PanelPlanoCartesiano panelPlanoCartesiano = PanelPlanoCartesiano.getInstance();
-            panelPlanoCartesiano.redesenha();
+        if (width > 0 && height > 0) {
 
-            // pega instancia do PanelMenu2D para acessar a cor selecionada
-            PanelMenu2D menu2D = PanelMenu2D.getInstance();
+            matrizObjeto = new double[3][4];
 
-            // Pega a instancia do graphics para desenhar no plano cartesiano    
-            Graphics g2D = (Graphics) panelPlanoCartesiano.getGraphics();
-            g2D.setColor(menu2D.getColor());
+            // PONTO A
+            matrizObjeto[0][0] = px;
+            matrizObjeto[1][0] = py;
+            matrizObjeto[2][0] = 1;
 
-            // Desenha o retangulo
-            g2D.drawRect(panelPlanoCartesiano.getValorCentroX(), panelPlanoCartesiano.getValorCentroY() - height, width, height);
+            // PONTO B
+            matrizObjeto[0][1] = width + px;
+            matrizObjeto[1][1] = 0 + py;
+            matrizObjeto[2][1] = 1;
+
+            // PONTO C
+            matrizObjeto[0][2] = width + px;
+            matrizObjeto[1][2] = height + py;
+            matrizObjeto[2][2] = 1;
+
+            // PONTO D
+            matrizObjeto[0][3] = 0 + px;
+            matrizObjeto[1][3] = height + py;
+            matrizObjeto[2][3] = 1;
+
+            PanelPlanoCartesiano.getInstance().drawObjeto2D(matrizObjeto, getColor());
+        } else {
+            JOptionPane.showMessageDialog(this.getRootPane(), "Faltou você definir a largura (W) e altura (H) do objeto!", "Desenhar Objeto?", JOptionPane.WARNING_MESSAGE);
         }
     }
 }

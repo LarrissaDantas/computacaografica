@@ -34,7 +34,7 @@ public class PanelOperacoes extends javax.swing.JPanel {
     private int imgHeight;
     private int imgValorMaximo;
 
-    public static PanelOperacoes getInstance() {
+    public static synchronized PanelOperacoes getInstance() {
         if (instance == null) {
             instance = new PanelOperacoes();
         }
@@ -44,7 +44,7 @@ public class PanelOperacoes extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelOperacoes() {
+    private PanelOperacoes() {
         initComponents();
     }
 

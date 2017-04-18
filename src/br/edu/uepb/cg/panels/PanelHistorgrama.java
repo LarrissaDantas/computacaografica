@@ -32,7 +32,7 @@ public class PanelHistorgrama extends javax.swing.JPanel {
     private int imgHeight;
     private int imgValorMaximo;
 
-    public static PanelHistorgrama getInstance() {
+    public static synchronized PanelHistorgrama getInstance() {
         if (instance == null) {
             instance = new PanelHistorgrama();
         }
@@ -42,7 +42,7 @@ public class PanelHistorgrama extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelHistorgrama() {
+    private PanelHistorgrama() {
         initComponents();
     }
 

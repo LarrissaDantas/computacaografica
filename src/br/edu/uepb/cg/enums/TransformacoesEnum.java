@@ -6,7 +6,7 @@ package br.edu.uepb.cg.enums;
  * @author Douglas Rafael
  */
 public enum TransformacoesEnum {
-    TRANSLACAO("Translação"), ESCALA("Escala"), ROTACAO("Rotação"), REFLEXAO("Reflexão"), CISALHAMENTO("Cisalhamento");
+    TRANSLACAO("Translação"), ESCALA("Escala"), ROTACAO("Rotação"), REFLEXAO("Reflexão"), CISALHAMENTO("Cisalhamento"), COMPOSTA("Composta");
 
     private final String titulo;
 

@@ -122,7 +122,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel6">
           <Properties>
-            <Property name="text" type="java.lang.String" value="&lt;html&gt;&#xa; &lt;div align=&quot;center&quot;&gt;Alunos:&lt;/p&gt;&lt;p&gt;Douglas Rafael&lt;br/&gt;Geovannio Vinhas&lt;br/&gt;S&#xe9;rgio Martins&lt;/div&gt;&#xa;&lt;/html&gt;"/>
+            <Property name="text" type="java.lang.String" value="&lt;html&gt;  &lt;div align=&quot;center&quot;&gt;Alunos:&lt;/p&gt;&lt;p&gt;Douglas Rafael&lt;br/&gt;Geovannio Vinhas&lt;br/&gt;Edson Sales&lt;/div&gt; &lt;/html&gt;"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="jLabel3">
@@ -137,7 +137,7 @@
         <Property name="text" type="java.lang.String" value="OK"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1close"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="dialogClose"/>
       </Events>
     </Component>
   </SubComponents>

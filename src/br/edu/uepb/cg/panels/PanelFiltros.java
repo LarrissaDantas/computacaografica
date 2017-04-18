@@ -38,7 +38,7 @@ public class PanelFiltros extends javax.swing.JPanel {
     private int imgHeight;
     private int imgValorMaximo;
 
-    public static PanelFiltros getInstance() {
+    public static synchronized PanelFiltros getInstance() {
         if (instance == null) {
             instance = new PanelFiltros();
         }
@@ -48,7 +48,7 @@ public class PanelFiltros extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelFiltros() {
+    private PanelFiltros() {
         initComponents();
     }
 

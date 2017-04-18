@@ -1,9 +1,9 @@
 package br.edu.uepb.cg.retas;
 
+import br.edu.uepb.cg.panels.PanelPlanoCartesiano;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
 
 /**
  * Algoritmos para desenhar circunferências
@@ -12,30 +12,41 @@ import javax.swing.*;
  */
 public class Circunferencia {
 
-    public static int x, y, d_old, x_dif, y_dif;
-    public static List<Ponto> listaPontos;
+    private static Circunferencia instance;
 
-    public Circunferencia() {
+    private final PanelPlanoCartesiano planoCartesiano;
+    private final Graphics g;
+
+    public static int x, y, d_old, x_dif, y_dif;
+    private List<Ponto> listaPontos;
+
+    private Circunferencia() {
         listaPontos = new ArrayList<>();
+        planoCartesiano = PanelPlanoCartesiano.getInstance();
+        g = planoCartesiano.getGraphics();
+    }
+
+    public static synchronized Circunferencia getInstance() {
+        if (instance == null) {
+            instance = new Circunferencia();
+        }
+        return instance;
     }
 
     /**
-     * Algoritmo da função explicita
+     * Algoritmo da função explicita.
      *
      * @param raio
      * @param cor
-     * @param panel
      */
-    public static void funcaoExplicita(int raio, Color cor, JPanel panel) {
-
+    public void funcaoExplicita(int raio, Color cor) {
+        planoCartesiano.redesenha();
+        
         for (int i = -raio; i < raio; i++) {
-
-            Graphics g = panel.getGraphics();
             g.setColor(cor);
-            g.fillRect(i + (panel.getWidth() / 2), (panel.getHeight() / 2) - ((int) Math.sqrt(raio * raio - i * i)), 1, 1);
-            g.fillRect(i + (panel.getWidth() / 2), (panel.getHeight() / 2) - (-1 * (int) Math.sqrt(raio * raio - i * i)), 1, 1);
+            g.fillRect(i + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - ((int) Math.sqrt(raio * raio - i * i)), 1, 1);
+            g.fillRect(i + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - (-1 * (int) Math.sqrt(raio * raio - i * i)), 1, 1);
         }
-
     }
 
     /**
@@ -43,14 +54,13 @@ public class Circunferencia {
      *
      * @param raio
      * @param cor
-     * @param panel
      */
-    public static void funcaoTrigonometria(int raio, Color cor, JPanel panel) {
+    public void funcaoTrigonometria(int raio, Color cor) {
+        planoCartesiano.redesenha();
         for (int i = -raio; i <= raio; i++) {
-            Graphics g = panel.getGraphics();
             g.setColor(cor);
-            g.fillRect(((int) (raio * (double) Math.cos(Math.toRadians(i)))) + (panel.getWidth() / 2), (panel.getHeight() / 2) - ((int) (raio * (double) Math.sin(Math.toRadians(i)))), 1, 1);
-            imprima(((int) (raio * (double) Math.cos(Math.toRadians(i)))), -((int) (raio * (double) Math.sin(Math.toRadians(i)))), cor, panel);
+            g.fillRect(((int) (raio * (double) Math.cos(Math.toRadians(i)))) + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - ((int) (raio * (double) Math.sin(Math.toRadians(i)))), 1, 1);
+            drawPontos(((int) (raio * (double) Math.cos(Math.toRadians(i)))), -((int) (raio * (double) Math.sin(Math.toRadians(i)))), cor);
         }
     }
 
@@ -59,16 +69,17 @@ public class Circunferencia {
      *
      * @param raio
      * @param cor
-     * @param panel
      */
-    public static void funcaoPontoMedio(int raio, Color cor, JPanel panel) {
-        Graphics g = panel.getGraphics();
-        g.setColor(cor);
+    public void funcaoPontoMedio(int raio, Color cor) {
+        planoCartesiano.redesenha();
+        
         x = 0;
         y = raio;
         d_old = 1 - raio;
-        g.fillRect(x + (panel.getWidth() / 2), (panel.getHeight() / 2) - y, 1, 1);
-        imprima(x, y, cor, panel);
+        
+        g.setColor(cor);
+        g.fillRect(x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - y, 1, 1);
+        drawPontos(x, y, cor);
         while (y > x) {
             if (d_old < 0) {
                 d_old += 2 * x + 3;
@@ -77,7 +88,7 @@ public class Circunferencia {
                 y--;
             }
             x++;
-            imprima(x, y, cor, panel);
+            drawPontos(x, y, cor);
         }
 
     }
@@ -88,9 +99,12 @@ public class Circunferencia {
      * @param a
      * @param b
      * @param cor
-     * @param panel
+     * @return
      */
-    public static void funcaoElipse(int a, int b, Color cor, JPanel panel) {
+    public List<Ponto> funcaoElipse(int a, int b, Color cor) {
+        planoCartesiano.redesenha();
+        listaPontos.clear();
+
         x = 0;
         y = 0;
         double d1;
@@ -101,7 +115,7 @@ public class Circunferencia {
         y = b;
         d1 = b * b - a * a * b + a * a / 4.0;
 
-        imprimaElipse(x, y, cor, panel);
+        drawElipse(x, y, cor);
 
         while (a * a * (y - 0.5) > b * b * (x + 1)) {
 
@@ -113,7 +127,7 @@ public class Circunferencia {
                 x++;
                 y--;
             }
-            imprimaElipse(x, y, cor, panel);
+            drawElipse(x, y, cor);
         }
 
         d2 = b * b * (x + 0.5) * (x + 0.5) + a * a * (y - 1) * (y - 1) - a * a * b * b;
@@ -127,9 +141,10 @@ public class Circunferencia {
                 d2 = d2 + a * a * (-2 * y + 3);
                 y--;
             }
-            imprimaElipse(x, y, cor, panel);
+            drawElipse(x, y, cor);
         }
 
+        return listaPontos;
     }
 
     /**
@@ -138,21 +153,19 @@ public class Circunferencia {
      * @param x
      * @param y
      * @param cor
-     * @param panel
      */
-    static void imprima(int x, int y, Color cor, JPanel panel) {
-        Graphics g = panel.getGraphics();
+    private void drawPontos(int x, int y, Color cor) {
         g.setColor(cor);
 
-        g.fillRect(x + (panel.getWidth() / 2), (panel.getHeight() / 2) - y, 1, 1);
-        g.fillRect(x + (panel.getWidth() / 2), (panel.getHeight() / 2) + y, 1, 1);
-        g.fillRect(-x + (panel.getWidth() / 2), (panel.getHeight() / 2) - y, 1, 1);
-        g.fillRect(-x + (panel.getWidth() / 2), (panel.getHeight() / 2) + y, 1, 1);
+        g.fillRect(x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - y, 1, 1);
+        g.fillRect(x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() + y, 1, 1);
+        g.fillRect(-x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - y, 1, 1);
+        g.fillRect(-x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() + y, 1, 1);
 
-        g.fillRect(y + (panel.getWidth() / 2), (panel.getHeight() / 2) - x, 1, 1);
-        g.fillRect(y + (panel.getWidth() / 2), (panel.getHeight() / 2) + x, 1, 1);
-        g.fillRect(-y + (panel.getWidth() / 2), (panel.getHeight() / 2) - x, 1, 1);
-        g.fillRect(-y + (panel.getWidth() / 2), (panel.getHeight() / 2) + x, 1, 1);
+        g.fillRect(y + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - x, 1, 1);
+        g.fillRect(y + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() + x, 1, 1);
+        g.fillRect(-y + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - x, 1, 1);
+        g.fillRect(-y + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() + x, 1, 1);
     }
 
     /**
@@ -163,22 +176,21 @@ public class Circunferencia {
      * @param cor
      * @param panel
      */
-    static void imprimaElipse(int x, int y, Color cor, JPanel panel) {
-        Graphics g = panel.getGraphics();
+    private void drawElipse(int x, int y, Color cor) {
         g.setColor(cor);
 
-        g.fillRect(x + (panel.getWidth() / 2), (panel.getHeight() / 2) - y, 1, 1);
-        g.fillRect(x + (panel.getWidth() / 2), (panel.getHeight() / 2) + y, 1, 1);
-        g.fillRect(-x + (panel.getWidth() / 2), (panel.getHeight() / 2) - y, 1, 1);
-        g.fillRect(-x + (panel.getWidth() / 2), (panel.getHeight() / 2) + y, 1, 1);
+        g.fillRect(x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - y, 1, 1);
+        g.fillRect(x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() + y, 1, 1);
+        g.fillRect(-x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() - y, 1, 1);
+        g.fillRect(-x + planoCartesiano.getValorCentroX(), planoCartesiano.getValorCentroY() + y, 1, 1);
 
-        if(listaPontos == null) {
+        if (listaPontos == null) {
             listaPontos = new ArrayList<>();
         }
-        listaPontos.add(new Ponto(x + (panel.getWidth() / 2), (panel.getHeight() / 2) - y));
-        listaPontos.add(new Ponto(x + (panel.getWidth() / 2), (panel.getHeight() / 2) + y));
-        listaPontos.add(new Ponto(-x + (panel.getWidth() / 2), (panel.getHeight() / 2) - y));
-        listaPontos.add(new Ponto(-x + (panel.getWidth() / 2), (panel.getHeight() / 2) + y));
-    }
 
+        listaPontos.add(new Ponto((double) (x + planoCartesiano.getValorCentroX()), (double) (planoCartesiano.getValorCentroY() - y)));
+        listaPontos.add(new Ponto((double) (x + planoCartesiano.getValorCentroX()), (double) (planoCartesiano.getValorCentroY() + y)));
+        listaPontos.add(new Ponto((double) (-x + planoCartesiano.getValorCentroX()), (double) (planoCartesiano.getValorCentroY() - y)));
+        listaPontos.add(new Ponto((double) (-x + planoCartesiano.getValorCentroX()), (double) (planoCartesiano.getValorCentroY() + y)));
+    }
 }

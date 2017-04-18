@@ -1,8 +1,5 @@
 package br.edu.uepb.cg.panels;
 
-import br.edu.uepb.cg.enums.FiltrosEnum;
-import br.edu.uepb.cg.filtros.FiltroMedia;
-import br.edu.uepb.cg.filtros.FiltroMediana;
 import br.edu.uepb.cg.processamentodeimagem.GatoArnold;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -38,7 +35,7 @@ public class PanelGatoArnold extends javax.swing.JPanel {
     private JLabel label;
     private ImageIcon icon;
 
-    public static PanelGatoArnold getInstance() {
+    public static synchronized PanelGatoArnold getInstance() {
         if (instance == null) {
             instance = new PanelGatoArnold();
         }
@@ -48,7 +45,7 @@ public class PanelGatoArnold extends javax.swing.JPanel {
     /**
      * Construtor
      */
-    public PanelGatoArnold() {
+    private PanelGatoArnold() {
         initComponents();
     }
 
@@ -193,7 +190,7 @@ public class PanelGatoArnold extends javax.swing.JPanel {
                 .addComponent(btAplicaFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(31, 31, 31)
                 .addComponent(panelImgOutput, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(42, Short.MAX_VALUE))
+                .addContainerGap(167, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

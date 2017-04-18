@@ -1,7 +1,6 @@
 package br.edu.uepb.cg.filtros;
 
 import br.edu.uepb.cg.processamentodeimagem.Normalizacao;
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**

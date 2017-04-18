@@ -1,5 +1,10 @@
 package br.edu.uepb.cg.dialog;
 
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import javax.swing.JComponent;
+import javax.swing.KeyStroke;
+
 /**
  * Dialog para mostrar gráficos
  *
@@ -9,10 +14,17 @@ public class DialogSobre extends javax.swing.JDialog {
 
     /**
      * Creates new form DialogCharts
+     *
+     * @param parent
+     * @param modal
      */
     public DialogSobre(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+
+        ActionListener a = this::dialogClose;
+
+        super.getRootPane().registerKeyboardAction(a, KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), JComponent.WHEN_IN_FOCUSED_WINDOW);
     }
 
     /**
@@ -45,7 +57,7 @@ public class DialogSobre extends javax.swing.JDialog {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("<html><div align=\"center\">Projeto para implementação da teoria vista em aula da disciplina de Computação Gráfica na Universidade Estadual da Paraíba.</div> </html>");
 
-        jLabel6.setText("<html>\n <div align=\"center\">Alunos:</p><p>Douglas Rafael<br/>Geovannio Vinhas<br/>Sérgio Martins</div>\n</html>");
+        jLabel6.setText("<html>  <div align=\"center\">Alunos:</p><p>Douglas Rafael<br/>Geovannio Vinhas<br/>Edson Sales</div> </html>");
 
         jLabel3.setText("<html>\n <div align=\"center\">Professor:</p><p>Robson Pequeno</div>\n</html>");
 
@@ -91,7 +103,7 @@ public class DialogSobre extends javax.swing.JDialog {
         jButton1.setText("OK");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1close(evt);
+                dialogClose(evt);
             }
         });
 
@@ -121,19 +133,14 @@ public class DialogSobre extends javax.swing.JDialog {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1close(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1close
+    private void dialogClose(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dialogClose
         this.dispose();
-    }//GEN-LAST:event_jButton1close
+    }//GEN-LAST:event_dialogClose
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -150,14 +157,6 @@ public class DialogSobre extends javax.swing.JDialog {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(DialogSobre.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
