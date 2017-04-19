@@ -1,6 +1,8 @@
 package br.edu.uepb.cg.panels;
 
-import br.edu.uepb.cg.transformacoes.*;
+import br.edu.uepb.cg.processamentodeimagem.Negativo;
+import br.edu.uepb.cg.processamentodeimagem.Gamma;
+import br.edu.uepb.cg.processamentodeimagem.Logaritmo;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;

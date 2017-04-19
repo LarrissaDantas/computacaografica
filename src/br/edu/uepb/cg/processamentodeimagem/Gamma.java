@@ -1,4 +1,4 @@
-package br.edu.uepb.cg.transformacoes;
+package br.edu.uepb.cg.processamentodeimagem;
 
 import br.edu.uepb.cg.processamentodeimagem.Normalizacao;
 import java.awt.image.BufferedImage;
@@ -7,17 +7,18 @@ import java.awt.image.BufferedImage;
  *
  * @author geovanniovinhas
  */
-public class Logaritmo {
+public class Gamma {
+
     private int[][] imagem;
     private int width;
     private int height;
-    private float constanteA;
+    private float gamma;
 
-    public Logaritmo(int[][] imagem, int width, int height, float constanteA) {
+    public Gamma(int[][] imagem, int width, int height, float gamma) {
         this.imagem = imagem;
         this.width = width;
         this.height = height;
-        this.constanteA = constanteA;
+        this.gamma = gamma;
     }
 
     public int[][] getImagem() {
@@ -44,21 +45,22 @@ public class Logaritmo {
         this.height = height;
     }
 
-    public float getConstanteA() {
-        return constanteA;
+    public float getGamma() {
+        return gamma;
     }
 
-    public void setConstanteA(float constanteA) {
-        this.constanteA = constanteA;
+    public void setGamma(float gamma) {
+        this.gamma = gamma;
     }
-    
-    public BufferedImage run(){
+
+    public BufferedImage run() {
         int matrizImagem[][] = new int[width][height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                matrizImagem[i][j] = (int)(constanteA * (Math.log(imagem[i][j] + 1)));
+                matrizImagem[i][j] = (int) (1 * (Math.pow(imagem[i][j], gamma)));
             }
         }
+
         return Normalizacao.normalizaImage(matrizImagem);
     }
 }

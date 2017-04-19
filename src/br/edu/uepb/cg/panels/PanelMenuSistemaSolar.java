@@ -1,6 +1,6 @@
 package br.edu.uepb.cg.panels;
 
-import br.edu.uepb.cg.transformacao2D.SistemaSolar;
+import br.edu.uepb.cg.transformacoes.SistemaSolar;
 
 /**
  * Representa o menu para manipulação da circunferência

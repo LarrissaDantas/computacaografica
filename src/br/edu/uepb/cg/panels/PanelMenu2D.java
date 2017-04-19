@@ -3,7 +3,7 @@ package br.edu.uepb.cg.panels;
 import br.edu.uepb.cg.App;
 import br.edu.uepb.cg.enums.TransformacoesEnum;
 import br.edu.uepb.cg.retas.Ponto;
-import br.edu.uepb.cg.transformacao2D.Transformacoes2D;
+import br.edu.uepb.cg.transformacoes.Transformacoes2D;
 import java.awt.Color;
 import java.awt.geom.Rectangle2D;
 import java.util.Stack;

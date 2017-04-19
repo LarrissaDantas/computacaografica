@@ -1,4 +1,4 @@
-package br.edu.uepb.cg.transformacoes;
+package br.edu.uepb.cg.processamentodeimagem;
 
 import br.edu.uepb.cg.processamentodeimagem.Normalizacao;
 import java.awt.image.BufferedImage;

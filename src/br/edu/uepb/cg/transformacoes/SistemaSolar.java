@@ -1,4 +1,4 @@
-package br.edu.uepb.cg.transformacao2D;
+package br.edu.uepb.cg.transformacoes;
 
 import br.edu.uepb.cg.panels.PanelPlanoCartesiano;
 import br.edu.uepb.cg.retas.Circunferencia;

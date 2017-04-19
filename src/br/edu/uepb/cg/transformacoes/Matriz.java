@@ -1,4 +1,4 @@
-package br.edu.uepb.cg.transformacao2D;
+package br.edu.uepb.cg.transformacoes;
 
 /**
  * Fornece métodos para operações em matrizes.
