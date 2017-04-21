@@ -36,10 +36,6 @@ public class Transformacoes3D {
      */
     public double[][] translacao(double[][] matrizObjeto, double tx, double ty, double tz) {
         double[][] matrizResult = new double[matrizObjeto.length][matrizObjeto[0].length];
-//        if (tz > 0) {
-//            tx = -tz;
-//            ty = -tz;
-//        }
 
         try {
             matrizResult = Matriz.multiplicaMatrizes(geraMatrizTranslacao(tx, ty, tz), matrizObjeto);

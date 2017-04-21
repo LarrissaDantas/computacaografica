@@ -10,6 +10,7 @@ import br.edu.uepb.cg.panels.PanelMenu2D;
 import br.edu.uepb.cg.panels.PanelMenu3D;
 import br.edu.uepb.cg.panels.PanelMenuCircunferencia;
 import br.edu.uepb.cg.panels.PanelMenuFiltros;
+import br.edu.uepb.cg.panels.PanelMenuImagem;
 import br.edu.uepb.cg.panels.PanelMenuOperacoes;
 import br.edu.uepb.cg.panels.PanelMenuRasterizacao;
 import br.edu.uepb.cg.panels.PanelMenuSistemaSolar;
@@ -45,6 +46,7 @@ public class App extends javax.swing.JFrame {
     private final PanelMenuTransformacoes panelMenuTransformacoes;
     private final PanelMenu2D panelMenu2D;
     private final PanelMenu3D panelMenu3D;
+    private final PanelMenuImagem panelMenuImagem;
     private final PanelMenuSistemaSolar panelMenuSistemaSolar;
 
     private final PanelFiltros panelFiltros;
@@ -66,6 +68,7 @@ public class App extends javax.swing.JFrame {
         panelArnold = PanelGatoArnold.getInstance();
         panelMenu2D = PanelMenu2D.getInstance();
         panelMenu3D = PanelMenu3D.getInstance();
+        panelMenuImagem = PanelMenuImagem.getInstance();
         panelMenuSistemaSolar = PanelMenuSistemaSolar.getInstance();
 
         panelFiltros = PanelFiltros.getInstance();
@@ -115,6 +118,7 @@ public class App extends javax.swing.JFrame {
         jMenu3 = new javax.swing.JMenu();
         menuItem2D = new javax.swing.JMenuItem();
         menuItem3D = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
@@ -378,6 +382,15 @@ public class App extends javax.swing.JFrame {
         });
         jMenu3.add(menuItem3D);
 
+        jMenuItem4.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_4, java.awt.event.InputEvent.SHIFT_MASK));
+        jMenuItem4.setText("Imagem");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                openTransImagem(evt);
+            }
+        });
+        jMenu3.add(jMenuItem4);
+
         menuBar.add(jMenu3);
 
         jMenu2.setText("Processamento de Imagens");
@@ -619,6 +632,17 @@ public class App extends javax.swing.JFrame {
         PanelPlanoCartesiano p = PanelPlanoCartesiano.getInstance();
         labelResTela.setText("Tela: " + p.getLargura() + " X " + p.getAltura());
     }//GEN-LAST:event_actionResized
+
+    private void openTransImagem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openTransImagem
+        panelMenuLeft.setVisible(true);
+
+        if (!panelFooter.isValid()) {
+            setDefaultBox();
+        } else {
+            PanelPlanoCartesiano.getInstance().redesenha();
+        }
+        changeMenuLeft(panelMenuImagem);
+    }//GEN-LAST:event_openTransImagem
 
     /**
      * Altera o jPanel do menu esquerdo de acordo com o jPanel passado como
@@ -923,6 +947,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JMenuItem jMenuItem7;
