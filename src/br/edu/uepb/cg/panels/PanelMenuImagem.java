@@ -4,22 +4,19 @@ import br.edu.uepb.cg.App;
 import br.edu.uepb.cg.enums.TransformacoesEnum;
 import br.edu.uepb.cg.retas.Ponto;
 import br.edu.uepb.cg.transformacoes.Transformacoes2D;
-import java.awt.Color;
 import java.awt.HeadlessException;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.util.Stack;
 import javax.swing.DefaultListModel;
-import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
- * Representa o menu para manipulação das transformações 2D
+ * Representa o menu para manipulação das transformações de imagem.
  *
  * @author Douglas Rafael
- * @author Geovannio Vinhas
  */
 public final class PanelMenuImagem extends javax.swing.JPanel {
 
