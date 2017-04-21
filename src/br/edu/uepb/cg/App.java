@@ -576,6 +576,7 @@ public class App extends javax.swing.JFrame {
         panelMenuLeft.setVisible(true);
 
         if (!panelFooter.isValid()) {
+            System.out.println("br.edu.uepb.cg.App.openTrans2D()" + " ENTROU!!!");
             setDefaultBox();
         } else {
             PanelPlanoCartesiano.getInstance().redesenha();
@@ -623,8 +624,8 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_openSistemaSolar
 
     /**
-     * Evento disparado toda vez que a tela é redimensinada. Seta a resolução
-     * da tela atual.
+     * Evento disparado toda vez que a tela é redimensinada. Seta a resolução da
+     * tela atual.
      *
      * @param evt
      */
@@ -687,8 +688,23 @@ public class App extends javax.swing.JFrame {
     private void setDefaultBox() {
         if (!panelFooter.isVisible()) {
             panelBox.removeAll();
-
+            System.out.println("br.edu.uepb.cg.App.setDefaultBox()" + "ENTROU TBM<!");
             changePanelCentral(panelPlanoCartesiano);
+
+            javax.swing.GroupLayout panelBoxLayout = new javax.swing.GroupLayout(panelBox);
+            panelBox.setLayout(panelBoxLayout);
+            panelBoxLayout.setHorizontalGroup(
+                    panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelBoxLayout.createSequentialGroup()
+                                    .addComponent(panelPlanoCartesiano, javax.swing.GroupLayout.DEFAULT_SIZE, 636, Short.MAX_VALUE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(panelFooter, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+            );
+            panelBoxLayout.setVerticalGroup(
+                    panelBoxLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelPlanoCartesiano, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                            .addComponent(panelFooter, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+            );
             panelFooter.setVisible(true);
         }
     }
@@ -864,25 +880,25 @@ public class App extends javax.swing.JFrame {
                     // Aplica translação
                     matrizObjeto3D = trans3D.translacao(matrizObjeto3D, menu.getValorX(), menu.getValorY(), menu.getValorZ());
                     break;
-                    case ESCALA:
-                        // Aplica escala de acordo com Sx e Sy
-                        matrizObjeto3D = trans3D.escala(matrizObjeto3D, menu.getValorX(), menu.getValorY(), menu.getValorZ());
-                        break;
-                    case ROTACAO:
-                        // Aplica rotação de acordo com o ângulo
-                        matrizObjeto3D = trans3D.rotacao(matrizObjeto3D, menu.getAngulo(), menu.getEixo());
-                        break;
-                    case REFLEXAO:
-                        // Aplica reflexão de acordo com o eixo selecionado
-                        matrizObjeto3D = trans3D.reflexao(matrizObjeto3D, menu.getEixo());
-                        break;
-                    case CISALHAMENTO:
-                        // Aplica cisalhamento de acordo com o valor de a e b
-                        matrizObjeto3D = trans3D.cisalhamento(matrizObjeto3D, menu.getValorX(), menu.getAlignmentY(), menu.getEixo());
-                        break;
-                    case COMPOSTA:
-                        matrizObjeto3D = trans3D.composta(menu.listaDeTransformacoes, matrizObjeto3D);
-                        break;
+                case ESCALA:
+                    // Aplica escala de acordo com Sx e Sy
+                    matrizObjeto3D = trans3D.escala(matrizObjeto3D, menu.getValorX(), menu.getValorY(), menu.getValorZ());
+                    break;
+                case ROTACAO:
+                    // Aplica rotação de acordo com o ângulo
+                    matrizObjeto3D = trans3D.rotacao(matrizObjeto3D, menu.getAngulo(), menu.getEixo());
+                    break;
+                case REFLEXAO:
+                    // Aplica reflexão de acordo com o eixo selecionado
+                    matrizObjeto3D = trans3D.reflexao(matrizObjeto3D, menu.getEixo());
+                    break;
+                case CISALHAMENTO:
+                    // Aplica cisalhamento de acordo com o valor de a e b
+                    matrizObjeto3D = trans3D.cisalhamento(matrizObjeto3D, menu.getValorX(), menu.getAlignmentY(), menu.getEixo());
+                    break;
+                case COMPOSTA:
+                    matrizObjeto3D = trans3D.composta(menu.listaDeTransformacoes, matrizObjeto3D);
+                    break;
                 default:
                     break;
             }
