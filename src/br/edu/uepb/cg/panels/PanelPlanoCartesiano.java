@@ -2,13 +2,20 @@ package br.edu.uepb.cg.panels;
 
 import br.edu.uepb.cg.retas.Ponto;
 import br.edu.uepb.cg.retas.Rasterizacao;
+import br.edu.uepb.cg.transformacoes.Imagem;
+import br.edu.uepb.cg.transformacoes.Matriz;
+import br.edu.uepb.cg.transformacoes.TransformacoesImagem;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Representa um plano cartesiano.
@@ -259,5 +266,70 @@ public class PanelPlanoCartesiano extends JPanel {
 //        g.drawLine(this.getValorCentroX() + (int) C.getX(), this.getValorCentroY() - (int) C.getY(), this.getValorCentroX() + (int) G.getX(), this.getValorCentroY() - (int) G.getY());
 //        // Ponto D até Pònto H
 //        g.drawLine(this.getValorCentroX() + (int) D.getX(), this.getValorCentroY() - (int) D.getY(), this.getValorCentroX() + (int) H.getX(), this.getValorCentroY() - (int) H.getY());
+    }
+
+    /**
+     * Desenha imagem no plano cartesiano.
+     *
+     * @param img Imagem
+     */
+    public void drawImage(Imagem img) {
+        BufferedImage bufferedImg = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
+        for (int row = 0; row < img.getWidth(); row++) {
+            for (int col = 0; col < img.getHeight(); col++) {
+                // Prepara a imagem para ser desenhada no jpanel
+                bufferedImg.setRGB(row, col, getCorPixel(img.getMatrizPixel()[row][col]));
+            }
+        }
+        
+        this.drawImage(bufferedImg);
+    }
+
+    /**
+     * Desenha imagem no plano cartesiano.
+     *
+     * @param bufferedImg BufferedImage
+     */
+    public void drawImage(BufferedImage bufferedImg) {
+        redesenha();
+        this.getGraphics().drawImage(bufferedImg, getValorCentroX(), getValorCentroY() - bufferedImg.getHeight(), null);
+    }
+
+    /**
+     * Recebe a imagem a ser processada e o AffineTransform contendo as transformações na imagem e desenha no plano cartesiano.
+     * 
+     * @param img
+     * @param affineTransform 
+     */
+    public void drawImage(Imagem img, AffineTransform affineTransform) {
+        BufferedImage bufferedImg = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
+        
+        // Ajsuta a imagem
+        for (int row = 0; row < img.getBufferedImage().getWidth(); row++) {
+            for (int col = 0; col < img.getBufferedImage().getHeight(); col++) {
+                // Prepara a imagem para ser desenhada no jpanel
+                bufferedImg.setRGB(row, col, getCorPixel(img.getMatrizPixel()[row][col]));
+            }
+        }
+        img.setBufferedImage(bufferedImg);
+        
+        redesenha(); // redesenha plano cartesiano
+
+        /**
+         * Printa a imagem no plano cartesiano
+         */
+        Graphics2D g2d = (Graphics2D) this.getGraphics();
+        g2d.setTransform(affineTransform);
+        g2d.drawImage(img.getBufferedImage(), getValorCentroX(), getValorCentroY() - img.getBufferedImage().getHeight(), null);
+    }
+
+    /**
+     * Retorna o valor em RGB de acordo com o valor do pixel
+     *
+     * @param corRGB
+     * @return
+     */
+    public int getCorPixel(int corRGB) {
+        return new Color(corRGB, corRGB, corRGB).getRGB();
     }
 }

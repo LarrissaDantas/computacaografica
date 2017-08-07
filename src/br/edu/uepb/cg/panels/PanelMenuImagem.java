@@ -3,6 +3,7 @@ package br.edu.uepb.cg.panels;
 import br.edu.uepb.cg.App;
 import br.edu.uepb.cg.enums.TransformacoesEnum;
 import br.edu.uepb.cg.retas.Ponto;
+import br.edu.uepb.cg.transformacoes.Imagem;
 import br.edu.uepb.cg.transformacoes.Transformacoes2D;
 import java.awt.HeadlessException;
 import java.awt.geom.Rectangle2D;
@@ -21,7 +22,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public final class PanelMenuImagem extends javax.swing.JPanel {
 
     private static PanelMenuImagem instance;
-    public static double[][] matrizObjeto;
+    public static Imagem imagem;
     public Stack<double[][]> listaDeTransformacoes;
 
     private Rectangle2D.Double rect;
@@ -138,10 +139,6 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         panelObjeto = new javax.swing.JPanel();
-        spinnerPY = new javax.swing.JSpinner();
-        spinnerPX = new javax.swing.JSpinner();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         btSelctImage1 = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
         jSeparator3 = new javax.swing.JSeparator();
@@ -326,26 +323,6 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         panelObjeto.setBorder(javax.swing.BorderFactory.createTitledBorder("Selecionar Imagem"));
         panelObjeto.setMaximumSize(new java.awt.Dimension(220, 106));
 
-        spinnerPY.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerPY.setModel(new javax.swing.SpinnerNumberModel(30.0d, null, null, 1.0d));
-        spinnerPY.setToolTipText("Coordenada de Y...");
-        spinnerPY.setMaximumSize(new java.awt.Dimension(30, 25));
-        spinnerPY.setMinimumSize(new java.awt.Dimension(30, 25));
-        spinnerPY.setPreferredSize(new java.awt.Dimension(30, 25));
-
-        spinnerPX.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerPX.setModel(new javax.swing.SpinnerNumberModel(50.0d, null, null, 1.0d));
-        spinnerPX.setToolTipText("Coordenada de X...");
-        spinnerPX.setMaximumSize(new java.awt.Dimension(30, 25));
-        spinnerPX.setMinimumSize(new java.awt.Dimension(30, 25));
-        spinnerPX.setPreferredSize(new java.awt.Dimension(30, 25));
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel3.setText("X");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel4.setText("Y");
-
         btSelctImage1.setText("Selecionar Imagem");
         btSelctImage1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         btSelctImage1.setPreferredSize(new java.awt.Dimension(121, 30));
@@ -361,16 +338,7 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
             panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelObjetoLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
-                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelObjetoLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(spinnerPX, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                        .addGap(25, 25, 25)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(spinnerPY, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(btSelctImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btSelctImage1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelObjetoLayout.setVerticalGroup(
@@ -378,12 +346,6 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
             .addGroup(panelObjetoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btSelctImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spinnerPX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(spinnerPY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -450,7 +412,7 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelDados1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelDados2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -458,8 +420,8 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
                 .addComponent(btResolve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(brAddLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -506,7 +468,7 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
             setValorY((double) valorDado2.getValue());
         }
 
-        if (matrizObjeto == null) {
+        if (imagem == null) {
             JOptionPane.showMessageDialog(this.getRootPane(), "Não há imagem no plano cartesiano!\nPor favor, selecione a imagem primeiro...", "Aplicar Transformação?", JOptionPane.WARNING_MESSAGE);
         } else {
             App.runResult(this);
@@ -532,6 +494,9 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         } else if (rbReflexao.isSelected()) {
             panelDados1.setVisible(false);
             panelDados2.setVisible(true);
+        } else if (rbEscala.isSelected()) {
+            valorDado1.setValue(1D);
+            valorDado2.setValue(1D);
         } else {
             lbDado1.setText("X");
             lbDado2.setVisible(true);
@@ -589,20 +554,24 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
 
     private void btSelctImage1selectImage1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelctImage1selectImage1
         try {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setCurrentDirectory(new File("src/br/edu/uepb/cg/assets/images/"));
+            JFileChooser file = new JFileChooser();
+            file.setCurrentDirectory(new File("src/br/edu/uepb/cg/assets/images/"));
             FileNameExtensionFilter filter = new FileNameExtensionFilter("PGM Images", "pgm");
-            fileChooser.setFileFilter(filter);
+            file.setFileFilter(filter);
 
-            int returnVal = fileChooser.showOpenDialog(btSelctImage1);
+            int returnVal = file.showOpenDialog(btSelctImage1);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
-                
+                imagem = Imagem.criaImagem(file.getSelectedFile());
+
+                // seta a posição atual da imagem
+                imagem.setPonto2D(0, 0);
+
+                PanelPlanoCartesiano.getInstance().drawImage(imagem);
             }
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(null, "OPS! Não foi possivel carregar a imagem.");
         }
     }//GEN-LAST:event_btSelctImage1selectImage1
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton brAddLista;
@@ -612,8 +581,6 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
     private javax.swing.ButtonGroup buttonGroupAlgoritmos;
     private javax.swing.ButtonGroup buttonGroupObjetos;
     private javax.swing.ButtonGroup buttonGroupReflexao;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
@@ -632,8 +599,6 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
     private javax.swing.JRadioButton rbReflexao;
     private javax.swing.JRadioButton rbRotacao;
     private javax.swing.JRadioButton rbTranslacao;
-    private javax.swing.JSpinner spinnerPX;
-    private javax.swing.JSpinner spinnerPY;
     private javax.swing.JSpinner valorDado1;
     private javax.swing.JSpinner valorDado2;
     // End of variables declaration//GEN-END:variables

@@ -19,9 +19,9 @@ public class Matriz {
     public static double[][] multiplicaMatrizes(double[][] matrizA, double[][] matrizB) throws Exception {
         double[][] matrizResultado = new double[matrizA.length][matrizB[0].length];
 
-        if (matrizA[0].length != matrizB.length) {
-            throw new Exception("O tamanho das matrizes são incompatíveis para a operação!");
-        }
+//        if (matrizA[0].length != matrizB.length) {
+//            throw new Exception();
+//        }
 
         for (int i = 0; i < matrizA.length; i++) {
             for (int j = 0; j < matrizB[0].length; j++) {
@@ -41,6 +41,25 @@ public class Matriz {
      * @param title 
      */
     public static void printMatriz(double[][] matriz, String title) {
+        System.out.println("======== " + title.toUpperCase() + " ======== ");
+        
+        for (int i = 0; i < matriz.length; i++) {
+            for (int j = 0; j < matriz[0].length; j++) {
+                System.out.print(matriz[i][j] + " ");
+            }
+            System.out.println("");
+        }
+    }
+    
+    
+        
+    /**
+     * Imprime valores da matriz passada como parâmetro.
+     * 
+     * @param matriz 
+     * @param title 
+     */
+    public static void printMatriz(int[][] matriz, String title) {
         System.out.println("======== " + title.toUpperCase() + " ======== ");
         
         for (int i = 0; i < matriz.length; i++) {

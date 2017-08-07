@@ -22,10 +22,12 @@ import br.edu.uepb.cg.panels.PanelTranformacoes;
 import br.edu.uepb.cg.retas.Circunferencia;
 import br.edu.uepb.cg.retas.Rasterizacao;
 import br.edu.uepb.cg.sistemacoordenadas.FuncoesDeNormalizacao;
+import br.edu.uepb.cg.transformacoes.Imagem;
 import br.edu.uepb.cg.transformacoes.Matriz;
 import br.edu.uepb.cg.transformacoes.SistemaSolar;
 import br.edu.uepb.cg.transformacoes.Transformacoes2D;
 import br.edu.uepb.cg.transformacoes.Transformacoes3D;
+import br.edu.uepb.cg.transformacoes.TransformacoesImagem;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
@@ -782,6 +784,8 @@ public class App extends javax.swing.JFrame {
             processaTransformacoes2D(PanelMenu2D.getInstance());
         } else if (instance instanceof PanelMenu3D) {
             processaTransformacoes3D(PanelMenu3D.getInstance());
+        } else if (instance instanceof PanelMenuImagem) {
+            processaTransformacoesImagem(PanelMenuImagem.getInstance());
         }
     }
 
@@ -932,6 +936,58 @@ public class App extends javax.swing.JFrame {
 
             // Desenha o objeto
             PanelPlanoCartesiano.getInstance().drawObjeto3D(matrizObjeto3D, menu.getColor());
+        }
+    }
+    
+     /**
+     * Processa o pedido vindo da tela de transformações 2D.
+     *
+     * @param menu
+     */
+    private static void processaTransformacoesImagem(PanelMenuImagem menu) {
+        if (PanelMenuImagem.imagem != null) {
+            TransformacoesImagem transImg = TransformacoesImagem.getInstance();
+
+            /**
+             * Matriz objeto original. Ela é atualizada em cada transformação
+             * aplicada.
+             */
+            Imagem imagem = PanelMenuImagem.imagem;
+
+            /**
+             * Fatores de translação.
+             */
+
+            switch (menu.getTipoAlgoritimo()) {
+                case TRANSLACAO:
+                    // Aplica translação
+                    transImg.translacao(imagem, menu.getValorX(), menu.getValorY());
+                    break;
+                case ESCALA:
+                    // Aplica escala de acordo com Sx e Sy
+                    transImg.escala(imagem, menu.getValorX(), menu.getValorY());
+                    break;
+                case ROTACAO:
+                    // Aplica rotação de acordo com o ângulo
+                    transImg.rotacao(imagem, menu.getAngulo());
+                    break;
+//                case REFLEXAO:
+//                    // Aplica reflexão de acordo com o eixo selecionado
+//                    matrizObjeto = transImg.reflexao(matrizObjeto, menu.getEixo());
+//                    break;
+//                case CISALHAMENTO:
+//                    // Aplica cisalhamento de acordo com o valor de a e b
+//                    matrizObjeto = transImg.cisalhamento(matrizObjeto, menu.getValorX(), menu.getValorY());
+//                    break;
+//                case COMPOSTA:
+//                    matrizObjeto = transImg.composta(menu.listaDeTransformacoes, matrizObjeto);
+//                    break;
+                default:
+                    break;
+            }
+
+            // Desenha o objeto
+//            PanelPlanoCartesiano.getInstance().drawImage(imagem.getBufferedImage());
         }
     }
 
