@@ -25,6 +25,7 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
      */
     private PanelMenuFiltros() {
         initComponents();
+        panelDados.setVisible(false);
     }
 
     public FiltrosEnum getTipoAlgoritimo() {
@@ -52,6 +53,10 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
     public void setTipoAlgoritimo(FiltrosEnum tipoAlgoritimo) {
         this.tipoAlgoritimo = tipoAlgoritimo;
     }
+    
+    private double getDouble() {
+        return (double) valorA.getValue();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -72,6 +77,10 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
         rbAltoReforco = new javax.swing.JRadioButton();
         rbSobel = new javax.swing.JRadioButton();
         rbRobertsCruzado = new javax.swing.JRadioButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        panelDados = new javax.swing.JPanel();
+        valorA = new javax.swing.JSpinner();
+        jLabel1 = new javax.swing.JLabel();
 
         setMaximumSize(new java.awt.Dimension(240, 32767));
         setMinimumSize(new java.awt.Dimension(240, 0));
@@ -167,7 +176,7 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
                     .addComponent(rbAltoReforco)
                     .addComponent(rbSobel)
                     .addComponent(rbRobertsCruzado))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 3, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +197,40 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
                 .addComponent(rbAltoReforco)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rbSobel)
-                .addContainerGap(107, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        panelDados.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados"));
+        panelDados.setMaximumSize(new java.awt.Dimension(220, 80));
+        panelDados.setMinimumSize(new java.awt.Dimension(220, 80));
+
+        valorA.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        valorA.setModel(new javax.swing.SpinnerNumberModel(1.0d, null, null, 1.0d));
+        valorA.setMaximumSize(new java.awt.Dimension(30, 25));
+        valorA.setMinimumSize(new java.awt.Dimension(30, 25));
+        valorA.setPreferredSize(new java.awt.Dimension(30, 25));
+
+        jLabel1.setText("Valor de A:");
+
+        javax.swing.GroupLayout panelDadosLayout = new javax.swing.GroupLayout(panelDados);
+        panelDados.setLayout(panelDadosLayout);
+        panelDadosLayout.setHorizontalGroup(
+            panelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDadosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(valorA, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        panelDadosLayout.setVerticalGroup(
+            panelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelDadosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelDadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(valorA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -196,8 +238,15 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(panelDados, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator1))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -205,13 +254,23 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(431, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panelDados, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(427, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void filtrosSelect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filtrosSelect
         JRadioButton radio = (JRadioButton) evt.getSource();
         PanelFiltros.getInstance().setTitle("Filtro de " + radio.getText());
+
+        if (rbAltoReforco.isSelected()) {
+            panelDados.setVisible(true);
+        } else {
+            panelDados.setVisible(false);
+        }
     }//GEN-LAST:event_filtrosSelect
 
     private void rbRobertsCruzadofiltrosSelect(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbRobertsCruzadofiltrosSelect
@@ -221,7 +280,10 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroupFiltros;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JPanel panelDados;
     private javax.swing.JRadioButton rbAltoReforco;
     private javax.swing.JRadioButton rbMedia;
     private javax.swing.JRadioButton rbMediana;
@@ -230,5 +292,6 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
     private javax.swing.JRadioButton rbRoberts;
     private javax.swing.JRadioButton rbRobertsCruzado;
     private javax.swing.JRadioButton rbSobel;
+    private javax.swing.JSpinner valorA;
     // End of variables declaration//GEN-END:variables
 }
