@@ -1,6 +1,7 @@
 package br.edu.uepb.cg.panels;
 
 import br.edu.uepb.cg.enums.FiltrosEnum;
+import br.edu.uepb.cg.filtros.FiltroAltoReforco;
 import br.edu.uepb.cg.filtros.FiltroMedia;
 import br.edu.uepb.cg.filtros.FiltroMediana;
 import br.edu.uepb.cg.filtros.FiltroPassaAlta;
@@ -277,7 +278,7 @@ public class PanelFiltros extends javax.swing.JPanel {
                 panelImgOutput.getGraphics().drawImage(new FiltroSobel(imagemMatriz, getImgWidth(), getImgHeight()).run(), 0, 0, null);
                 break;
             case ALTO_REFORCO:
-                panelImgOutput.getGraphics().drawImage(new FiltroPrewitt(imagemMatriz, getImgWidth(), getImgHeight()).run(), 0, 0, null);
+                panelImgOutput.getGraphics().drawImage(new FiltroAltoReforco(imagemMatriz, menuFiltros.getA() ,getImgWidth(), getImgHeight()).run(), 0, 0, null);
                 break;
             default:
                 break;

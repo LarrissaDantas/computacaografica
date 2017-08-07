@@ -54,7 +54,7 @@ public class PanelMenuFiltros extends javax.swing.JPanel {
         this.tipoAlgoritimo = tipoAlgoritimo;
     }
     
-    private double getDouble() {
+    public double getA() {
         return (double) valorA.getValue();
     }
 
