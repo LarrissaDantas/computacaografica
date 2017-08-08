@@ -971,14 +971,14 @@ public class App extends javax.swing.JFrame {
                     // Aplica rotação de acordo com o ângulo
                     transImg.rotacao(imagem, menu.getAngulo());
                     break;
-//                case REFLEXAO:
-//                    // Aplica reflexão de acordo com o eixo selecionado
-//                    matrizObjeto = transImg.reflexao(matrizObjeto, menu.getEixo());
-//                    break;
-//                case CISALHAMENTO:
-//                    // Aplica cisalhamento de acordo com o valor de a e b
-//                    matrizObjeto = transImg.cisalhamento(matrizObjeto, menu.getValorX(), menu.getValorY());
-//                    break;
+                case REFLEXAO:
+                    // Aplica reflexão de acordo com o eixo selecionado
+                    transImg.reflexao(imagem, menu.getEixo());
+                    break;
+                case CISALHAMENTO:
+                    // Aplica cisalhamento de acordo com o valor de a e b
+                    transImg.cisalhamento(imagem, menu.getValorX(), menu.getValorY());
+                    break;
 //                case COMPOSTA:
 //                    matrizObjeto = transImg.composta(menu.listaDeTransformacoes, matrizObjeto);
 //                    break;

@@ -140,12 +140,8 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         jRadioButton3 = new javax.swing.JRadioButton();
         panelObjeto = new javax.swing.JPanel();
         btSelctImage1 = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JSeparator();
+        btSelctImage2 = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
-        brAddLista = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        listTransformacoes = new javax.swing.JList<>();
-        btResolveCompostas = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(240, 779));
         setMinimumSize(new java.awt.Dimension(240, 779));
@@ -328,7 +324,16 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         btSelctImage1.setPreferredSize(new java.awt.Dimension(121, 30));
         btSelctImage1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSelctImage1selectImage1(evt);
+                carregarImagem(evt);
+            }
+        });
+
+        btSelctImage2.setText("Resetar Imagem");
+        btSelctImage2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        btSelctImage2.setPreferredSize(new java.awt.Dimension(121, 30));
+        btSelctImage2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                resetarImagem(evt);
             }
         });
 
@@ -337,8 +342,10 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         panelObjetoLayout.setHorizontalGroup(
             panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelObjetoLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addComponent(btSelctImage1, javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(panelObjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btSelctImage1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btSelctImage2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelObjetoLayout.setVerticalGroup(
@@ -346,43 +353,10 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
             .addGroup(panelObjetoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btSelctImage1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btSelctImage2, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        brAddLista.setText("Adicionar à Lista Trans. Composta");
-        brAddLista.setToolTipText("Adicione as transformações na ordem que desejar. Depois clique em: Aplicar Transformações Compostas...");
-        brAddLista.setMaximumSize(new java.awt.Dimension(151, 23));
-        brAddLista.setMinimumSize(new java.awt.Dimension(151, 23));
-        brAddLista.setPreferredSize(new java.awt.Dimension(61, 30));
-        brAddLista.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addListaTransformacoes(evt);
-            }
-        });
-
-        listTransformacoes.setBorder(javax.swing.BorderFactory.createTitledBorder("Lista Para Transformações Compostas"));
-        listTransformacoes.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        listTransformacoes.setForeground(new java.awt.Color(102, 102, 102));
-        listTransformacoes.setModel(modelList);
-        listTransformacoes.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listTransformacoes.setToolTipText("Duplo clique para remover da lista...");
-        listTransformacoes.setDropMode(javax.swing.DropMode.ON_OR_INSERT);
-        listTransformacoes.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                removeTransformacao(evt);
-            }
-        });
-        jScrollPane1.setViewportView(listTransformacoes);
-
-        btResolveCompostas.setText("Aplicar Transformações Compostas");
-        btResolveCompostas.setMaximumSize(new java.awt.Dimension(151, 23));
-        btResolveCompostas.setMinimumSize(new java.awt.Dimension(151, 23));
-        btResolveCompostas.setPreferredSize(new java.awt.Dimension(61, 30));
-        btResolveCompostas.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                aplicaTransCompostas(evt);
-            }
-        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -392,14 +366,10 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelObjeto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jSeparator2)
                     .addComponent(jSeparator3)
                     .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelDados2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btResolve, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(brAddLista, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btResolveCompostas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panelDados1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -410,7 +380,7 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
                 .addComponent(panelObjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(1, 1, 1)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(panelDados1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -418,15 +388,7 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
                 .addComponent(panelDados2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btResolve, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(brAddLista, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btResolveCompostas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addContainerGap(251, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -497,6 +459,9 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         } else if (rbEscala.isSelected()) {
             valorDado1.setValue(1D);
             valorDado2.setValue(1D);
+            lbDado1.setText("X");
+            lbDado2.setVisible(true);
+            valorDado2.setVisible(true);
         } else {
             lbDado1.setText("X");
             lbDado2.setVisible(true);
@@ -504,55 +469,7 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_selectedTransformacao
 
-    private void addListaTransformacoes(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addListaTransformacoes
-        Transformacoes2D trans2D = Transformacoes2D.getInstance();
-        /**
-         * Seta o tipo de algoritmo selecionado e seus parametros necessários
-         */
-        if (rbTranslacao.isSelected()) {
-            modelList.addElement("- Translação: Tx=" + valorDado1.getValue() + ", Ty=" + valorDado2.getValue());
-            listaDeTransformacoes.push(trans2D.geraMatrizTranslacao((double) valorDado1.getValue(), (double) valorDado2.getValue()));
-        } else if (rbEscala.isSelected()) {
-            modelList.addElement("- Escala: Sx=" + valorDado1.getValue() + ", Sy=" + valorDado2.getValue());
-            listaDeTransformacoes.push(trans2D.geraMatrizEscala((double) valorDado1.getValue(), (double) valorDado2.getValue()));
-        } else if (rbRotacao.isSelected()) {
-            modelList.addElement("- Rotação: Θ=" + valorDado1.getValue());
-            listaDeTransformacoes.push(trans2D.geraMatrizRotacao((double) valorDado1.getValue()));
-        } else if (rbReflexao.isSelected()) {
-            if (jRadioButton1.isSelected()) {
-                modelList.addElement("- Reflexão em X");
-                listaDeTransformacoes.push(trans2D.geraMatrizReflexao("x"));
-            } else if (jRadioButton2.isSelected()) {
-                modelList.addElement("- Reflexão em Y");
-                listaDeTransformacoes.push(trans2D.geraMatrizReflexao("y"));
-            } else if (jRadioButton3.isSelected()) {
-                modelList.addElement("- Reflexão em XY");
-                listaDeTransformacoes.push(trans2D.geraMatrizReflexao("xy"));
-            }
-        } else if (rbCisalhamento.isSelected()) {
-            modelList.addElement("- Cisalhamento: Cx=" + valorDado1.getValue() + ", Cy=" + valorDado2.getValue());
-            listaDeTransformacoes.push(trans2D.geraMatrizCisalhamento((double) valorDado1.getValue(), (double) valorDado2.getValue()));
-        }
-    }//GEN-LAST:event_addListaTransformacoes
-
-    private void removeTransformacao(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_removeTransformacao
-        if (evt.getClickCount() == 2) {
-            int indexItem = listTransformacoes.getSelectedIndex();
-            modelList.remove(indexItem);
-            listaDeTransformacoes.remove(indexItem);
-        }
-    }//GEN-LAST:event_removeTransformacao
-
-    private void aplicaTransCompostas(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aplicaTransCompostas
-        if (!listaDeTransformacoes.isEmpty()) {
-            setTipoAlgoritimo(TransformacoesEnum.COMPOSTA);
-            App.runResult(this);
-        } else {
-            JOptionPane.showMessageDialog(this.getRootPane(), "Você não adicionou nenhum tipo de transformação na lista.\nPor favor, adicione e tente novamente...", "Aplicar Transformações Compostas?", JOptionPane.WARNING_MESSAGE);
-        }
-    }//GEN-LAST:event_aplicaTransCompostas
-
-    private void btSelctImage1selectImage1(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSelctImage1selectImage1
+    private void carregarImagem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_carregarImagem
         try {
             JFileChooser file = new JFileChooser();
             file.setCurrentDirectory(new File("src/br/edu/uepb/cg/assets/images/"));
@@ -571,13 +488,17 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
         } catch (HeadlessException e) {
             JOptionPane.showMessageDialog(null, "OPS! Não foi possivel carregar a imagem.");
         }
-    }//GEN-LAST:event_btSelctImage1selectImage1
+    }//GEN-LAST:event_carregarImagem
+
+    private void resetarImagem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_resetarImagem
+        PanelPlanoCartesiano.getInstance().drawImage(imagem);
+    }//GEN-LAST:event_resetarImagem
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton brAddLista;
     private javax.swing.JButton btResolve;
-    private javax.swing.JButton btResolveCompostas;
     private javax.swing.JButton btSelctImage1;
+    private javax.swing.JButton btSelctImage2;
     private javax.swing.ButtonGroup buttonGroupAlgoritmos;
     private javax.swing.ButtonGroup buttonGroupObjetos;
     private javax.swing.ButtonGroup buttonGroupReflexao;
@@ -585,12 +506,9 @@ public final class PanelMenuImagem extends javax.swing.JPanel {
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JLabel lbDado1;
     private javax.swing.JLabel lbDado2;
-    private javax.swing.JList<String> listTransformacoes;
     private javax.swing.JPanel panelDados1;
     private javax.swing.JPanel panelDados2;
     private javax.swing.JPanel panelObjeto;

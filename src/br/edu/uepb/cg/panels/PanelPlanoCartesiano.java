@@ -3,8 +3,6 @@ package br.edu.uepb.cg.panels;
 import br.edu.uepb.cg.retas.Ponto;
 import br.edu.uepb.cg.retas.Rasterizacao;
 import br.edu.uepb.cg.transformacoes.Imagem;
-import br.edu.uepb.cg.transformacoes.Matriz;
-import br.edu.uepb.cg.transformacoes.TransformacoesImagem;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -13,9 +11,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Representa um plano cartesiano.
@@ -26,8 +21,6 @@ import java.util.logging.Logger;
 public class PanelPlanoCartesiano extends JPanel {
 
     private static PanelPlanoCartesiano instance;
-    private BufferedImage bufferedImage;
-    private static List<Ponto> pontosEixoZ;
 
     private PanelPlanoCartesiano() {
         /**
@@ -308,7 +301,8 @@ public class PanelPlanoCartesiano extends JPanel {
         for (int row = 0; row < img.getBufferedImage().getWidth(); row++) {
             for (int col = 0; col < img.getBufferedImage().getHeight(); col++) {
                 // Prepara a imagem para ser desenhada no jpanel
-                bufferedImg.setRGB(row, col, getCorPixel(img.getMatrizPixel()[row][col]));
+                if(row < 256 && col < 256)
+                    bufferedImg.setRGB(row, col, getCorPixel(img.getMatrizPixel()[row][col]));
             }
         }
         img.setBufferedImage(bufferedImg);

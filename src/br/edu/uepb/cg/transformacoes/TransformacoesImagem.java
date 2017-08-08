@@ -2,17 +2,17 @@ package br.edu.uepb.cg.transformacoes;
 
 import br.edu.uepb.cg.enums.Eixo;
 import br.edu.uepb.cg.panels.PanelMenu2D;
-import br.edu.uepb.cg.panels.PanelMenuImagem;
 import br.edu.uepb.cg.panels.PanelPlanoCartesiano;
 import br.edu.uepb.cg.retas.Ponto;
 import java.awt.Graphics2D;
+import java.awt.GraphicsConfiguration;
+import java.awt.GraphicsDevice;
+import java.awt.GraphicsEnvironment;
+import java.awt.Transparency;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
 import java.util.Stack;
-import javax.swing.JPanel;
 
 /**
  * Métodos para transformações 2D.
@@ -45,36 +45,6 @@ public class TransformacoesImagem {
      * @param ty
      */
     public void translacao(Imagem img, double tx, double ty) {
-//        int w = img.getWidth() + (int) Math.abs(tx);
-//        int h = img.getHeight() + (int) Math.abs(ty);
-//        BufferedImage bufferedImage = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-//        Imagem imgResult = new Imagem();
-//
-//        try {
-//            int x, y;
-//            double[][] m_temp = new double[3][1];
-//            for (int row = 0; row < img.getWidth(); row++) {
-//                for (int col = 0; col < img.getHeight(); col++) {
-//                    m_temp[0][0] = row;
-//                    m_temp[1][0] = col;
-//                    m_temp[2][0] = 1;
-//
-//                    m_temp = Matriz.multiplicaMatrizes(TransformacoesImagem.getInstance().geraMatrizTranslacao(tx, 0), m_temp);
-//                    x = (int) m_temp[0][0];
-//                    y = (int) m_temp[1][0];
-//
-//                    bufferedImage.setRGB(x, y, PanelPlanoCartesiano.getInstance().getCorPixel(img.getMatrizPixel()[row][col]));
-//                }
-//            }
-//
-//            imgResult.setMatrizPixel(img.getMatrizPixel());
-//            imgResult.setBufferedImage(bufferedImage);
-//
-//            PanelMenuImagem.imagem = imgResult;
-//        } catch (Exception e) {
-//            System.err.println("Ocorreu um erro na translação!\n" + e.getMessage());
-//        }
-
         // Atualiza o ponto da imagem com o valor da translação
         img.setPonto(new Ponto(img.getPonto().getX() + tx, img.getPonto().getY() + ty));
 
@@ -95,172 +65,136 @@ public class TransformacoesImagem {
      * @param angulo
      */
     public void rotacao(Imagem imagem, double angulo) {
+        int width = imagem.getBufferedImage().getWidth();
+        int height = imagem.getBufferedImage().getHeight();
+
+        imagem.setBufferedImage(tratarImagem(imagem));
+
+        /**
+         * Aplica a translação usando o AffineTransform
+         */
         PanelPlanoCartesiano panel = PanelPlanoCartesiano.getInstance();
+        Graphics2D g2d = (Graphics2D) panel.getGraphics();
         panel.redesenha();
 
-        AffineTransform affineTransform = new AffineTransform();
-        BufferedImage rotated;
+        BufferedImage img = rotate(imagem.getBufferedImage(), angulo);
+        g2d.drawImage(img, panel.getValorCentroX(), panel.getValorCentroY() - height, null);
+    }
 
-        double rads = Math.toRadians(angulo);
-        double sin = Math.abs(Math.sin(rads)), cos = Math.abs(Math.cos(rads));
-        int w = imagem.getWidth();
-        int h = imagem.getHeight();
-        int newWidth = (int) Math.floor(w * cos + h * sin);
-        int newHeight = (int) Math.floor(h * cos + w * sin);
+    public BufferedImage rotate(BufferedImage image, double angle) {
+        double sin = Math.abs(Math.sin(angle)), cos = Math.abs(Math.cos(angle));
+        int w = image.getWidth(), h = image.getHeight();
+        int neww = (int) Math.floor(w * cos + h * sin), newh = (int) Math.floor(h * cos + w * sin);
+        GraphicsConfiguration gc = getDefaultConfiguration();
+        BufferedImage result = gc.createCompatibleImage(neww, newh, Transparency.TRANSLUCENT);
+        Graphics2D g = result.createGraphics();
+        g.translate((neww - w) / 2, (newh - h) / 2);
+        g.rotate(angle, w / 2, h / 2);
+        g.drawRenderedImage(image, null);
+        g.dispose();
+        return result;
+    }
 
-        rotated = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
-        AffineTransform at = new AffineTransform();
-//            at.translate((newWidth - w) / 2, (newHeight - h) / 2);
-
-        int x = (int) imagem.getPonto().getX();
-        int y = (int) imagem.getPonto().getY();
-
-        Graphics2D g2d = (Graphics2D) panel.getGraphics();
-
-        at.rotate(Math.toRadians(angulo), x, y);
-        g2d.setTransform(at);
-        g2d.drawImage(imagem.getBufferedImage(), panel.getValorCentroX(), panel.getValorCentroY(), null);
-
-//        affineTransform.translate(imagem.getPonto().getX(), -imagem.getPonto().getY());
-//        PanelPlanoCartesiano.getInstance().drawImage(imagem, affineTransform);
-//        PanelPlanoCartesiano panel = PanelPlanoCartesiano.getInstance();
-//        Graphics2D g2d = (Graphics2D) panel.getGraphics();
-//        g2d.setTransform(affineTransform);
-//        panel.redesenha();
-//        
-//        g2d.drawImage(imagem.getBufferedImage(), panel.getValorCentroX(), panel.getValorCentroY(), null);
+    private GraphicsConfiguration getDefaultConfiguration() {
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        GraphicsDevice gd = ge.getDefaultScreenDevice();
+        return gd.getDefaultConfiguration();
     }
 
     /**
      * Aplica escala no objeto passado como parametro, de acordo com os fatores
      * de escala.
      *
-     * @param matrizObjeto
+     * @param imagem
      * @param sx
      * @param sy
-     * @return double[][] - Matriz resultado.
      */
     public void escala(Imagem imagem, double sx, double sy) {
-//        double[][] matrizResult = new double[matrizObjeto.length][matrizObjeto[0].length];
-//
-//        // Fatores de translação.
-//        double tx = matrizObjeto[0][0], ty = matrizObjeto[1][0];
-//
-//        try {
-//            // (Matriz translação posição inicial) X (Matriz Escala)
-//            matrizM = Matriz.multiplicaMatrizes(geraMatrizTranslacao(tx, ty), geraMatrizEscala(sx, sy));
-//
-//            // (Matriz M) X (Matriz translação para origem)
-//            matrizM = Matriz.multiplicaMatrizes(matrizM, geraMatrizTranslacao(-tx, -ty));
-//
-//            // (Matriz M) X (Matriz objeto)
-//            matrizResult = Matriz.multiplicaMatrizes(matrizM, matrizObjeto);
-//
-//            // Atualiza matriz objeto global.
-//            PanelMenu2D.matrizObjeto = matrizResult;
-//        } catch (Exception e) {
-//            System.err.println("Ocorreu um erro na escala!");
-//        }
+        double fatorX = imagem.getWidth() * sx;
+        double fatorY = imagem.getHeight() * sy;
+
+        int width = (int) fatorX;
+        int height = (int) fatorY;
 
         /**
          * Aplica a translação usando o AffineTransform
          */
         PanelPlanoCartesiano panel = PanelPlanoCartesiano.getInstance();
-        AffineTransform affineTransform = new AffineTransform();
-
-//        affineTransform.translate(0, 0);
-//        affineTransform.scale(sx, sy);
-//        affineTransform.scale(sx, sy);
-//        affineTransform.translate(panel.getValorCentroX() + imagem.getPonto().getX(), panel.getValorCentroY());
-//        affineTransform.translate(panel.getValorCentroX(), panel.getValorCentroY() - imagem.getBufferedImage().getHeight()); // origem
-//        affineTransform.translate(imagem.getPonto().getX(), -imagem.getPonto().getY());
-//        affineTransform.translate(imagem.getPonto().getX(), panel.getValorCentroY() - imagem.getBufferedImage().getHeight()); // origem
-        // Chama o método responsável para tratar a imagem e desenhar no plano cartesiano
-        panel.redesenha();
         Graphics2D g2d = (Graphics2D) panel.getGraphics();
-//        g2d.setTransform(affineTransform);
+        panel.redesenha();
 
-        BufferedImage bufferedImg = new BufferedImage(imagem.getWidth(), imagem.getHeight(), BufferedImage.TYPE_INT_RGB);
-        for (int row = 0; row < imagem.getBufferedImage().getWidth(); row++) {
-            for (int col = 0; col < imagem.getBufferedImage().getHeight(); col++) {
-                // Prepara a imagem para ser desenhada no jpanel
-                bufferedImg.setRGB(row, col, panel.getCorPixel(imagem.getMatrizPixel()[row][col]));
-            }
-        }
-        imagem.setBufferedImage(bufferedImg);
-        
+        imagem.setBufferedImage(tratarImagem(imagem));
+
+        BufferedImage after = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         AffineTransform at = new AffineTransform();
         at.scale(sx, sy);
-        double fatorX = (sx > 1) ? (imagem.getBufferedImage().getHeight() * sx)/2 : 0;
-        double fatorY = imagem.getBufferedImage().getHeight() * sy;
-        System.out.println("X:" + fatorX + " Y:" +fatorY);
-        
-        at.translate((int)(panel.getValorCentroX() - fatorX), (int) (panel.getValorCentroY() - fatorY));
-//        g2d.setTransform(at);
+        AffineTransformOp scaleOp = new AffineTransformOp(at, AffineTransformOp.TYPE_BILINEAR);
+        after = scaleOp.filter(imagem.getBufferedImage(), after);
+//        imagem.setBufferedImage(after);
 
-
-        
-//        g2d.drawImage(imagem.getBufferedImage(), (int)(panel.getValorCentroX() - at.getScaleX() - bufferedImg.getWidth()), (int) (panel.getValorCentroY() - at.getScaleY()), null);
-        g2d.drawImage(imagem.getBufferedImage(), at, null);
-
-//        PanelPlanoCartesiano.getInstance().drawImage(imagem, affineTransform);
+        g2d.drawImage(after, panel.getValorCentroX(), panel.getValorCentroY() - height, null);
     }
 
     /**
      * Aplica reflexão no objeto passado como parametro, de acordo com o eixo
      * escolhido
      *
-     * @param matrizObjeto
+     * @param imagem
      * @param eixo
-     * @return double[][] - Matriz resultado.
      */
-    public double[][] reflexao(double[][] matrizObjeto, String eixo) {
-        double[][] matrizResult = new double[matrizObjeto.length][matrizObjeto[0].length];
-        eixo = eixo.toUpperCase();
+    public void reflexao(Imagem imagem, String eixo) {
+        BufferedImage image = tratarImagem(imagem);
 
-        try {
-            matrizResult = Matriz.multiplicaMatrizes(geraMatrizReflexao(eixo), matrizObjeto);
-            // Atualiza matriz objeto global.
-            PanelMenu2D.matrizObjeto = matrizResult;
-        } catch (Exception e) {
-            System.err.println("Ocorreu um erro na reflexão em: " + eixo + "!");
-        }
+        // Flip the image vertically
+        AffineTransform tx = AffineTransform.getScaleInstance(1, -1);
+        tx.translate(0, -imagem.getBufferedImage().getHeight(null));
+        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        image = op.filter(image, null);
 
-        return matrizResult;
+        // Flip the image horizontally
+        tx = AffineTransform.getScaleInstance(-1, 1);
+        tx.translate(-image.getWidth(null), 0);
+        op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+        image = op.filter(image, null);
+
+//        // Flip the image vertically and horizontally; equivalent to rotating the image 180 degrees
+//        tx = AffineTransform.getScaleInstance(-1, -1);
+//        tx.translate(-image.getWidth(null), -image.getHeight(null));
+//        op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+//        image = op.filter(image, null);
+        PanelPlanoCartesiano panel = PanelPlanoCartesiano.getInstance();
+        Graphics2D g2d = (Graphics2D) panel.getGraphics();
+        panel.redesenha();
+        System.out.println("br.edu.uepb.cg.transformacoes.TransformacoesImagem.reflexao()");
+        g2d.drawImage(image, panel.getValorCentroX(), panel.getValorCentroY() - image.getHeight(), null);
     }
 
     /**
      * Aplica cisalhamento no objeto passado como parametro, de acordo com os
      * fatores a e b.
      *
-     * @param matrizObjeto
+     * @param imagem
      * @param cx
      * @param cy
-     * @return double[][] - Matriz resultado.
      */
-    public double[][] cisalhamento(double[][] matrizObjeto, double cx, double cy) {
-        double[][] matrizResult = new double[matrizObjeto.length][matrizObjeto[0].length];
+    public void cisalhamento(Imagem imagem, double cx, double cy) {
+        double fatorX = imagem.getWidth() * cx;
+        double fatorY = imagem.getHeight() * cy;
 
-        // Fatores de translação.
-        double tx = matrizObjeto[0][0], ty = matrizObjeto[1][0];
+        /**
+         * Aplica a translação usando o AffineTransform
+         */
+        PanelPlanoCartesiano panel = PanelPlanoCartesiano.getInstance();
+        Graphics2D g2d = (Graphics2D) panel.getGraphics();
+        panel.redesenha();
 
-        try {
-            // (Matriz translação posição inicial) X (Matriz Cisalhamento)
-            matrizM = Matriz.multiplicaMatrizes(geraMatrizTranslacao(tx, ty), geraMatrizCisalhamento(cx, cy));
+        imagem.setBufferedImage(tratarImagem(imagem));
 
-            // (Matriz M) X (Matriz translação para origem)
-            matrizM = Matriz.multiplicaMatrizes(matrizM, geraMatrizTranslacao(-tx, -ty));
-
-            // (Matriz M) X (Matriz objeto)
-            matrizResult = Matriz.multiplicaMatrizes(matrizM, matrizObjeto);
-
-            // Atualiza matriz objeto global.
-            PanelMenu2D.matrizObjeto = matrizResult;
-        } catch (Exception e) {
-            System.err.println("Ocorreu um erro no cisalhamento!");
-        }
-
-        return matrizResult;
+        AffineTransform at = new AffineTransform();
+        at.translate(panel.getValorCentroX() + imagem.getWidth() * cx, panel.getValorCentroY() - imagem.getHeight());
+        at.shear(-cx, -cy);
+        
+        g2d.drawImage(imagem.getBufferedImage(), at, null);
     }
 
     /**
@@ -437,5 +371,19 @@ public class TransformacoesImagem {
         matriz[2][2] = 1;
 
         return matriz;
+    }
+
+    private BufferedImage tratarImagem(Imagem imagem) {
+        BufferedImage bufferedImg = new BufferedImage(imagem.getBufferedImage().getWidth(), imagem.getBufferedImage().getHeight(), BufferedImage.TYPE_INT_RGB);
+        for (int row = 0; row < imagem.getBufferedImage().getWidth(); row++) {
+            for (int col = 0; col < imagem.getBufferedImage().getHeight(); col++) {
+                // Prepara a imagem para ser desenhada no jpanel
+                if (row < 256 && col < 256) {
+                    bufferedImg.setRGB(row, col, PanelPlanoCartesiano.getInstance().getCorPixel(imagem.getMatrizPixel()[row][col]));
+                }
+            }
+        }
+
+        return bufferedImg;
     }
 }
