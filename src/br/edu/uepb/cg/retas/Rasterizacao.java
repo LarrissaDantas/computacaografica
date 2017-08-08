@@ -99,10 +99,10 @@ public class Rasterizacao {
      * @param textAreaSolution jTextArea para exibir solução
      */
     public void pontoMedio(Ponto pInicial, Ponto pFinal, Color cor, JTextArea textAreaSolution) {
-        double x1 = pInicial.getX() + pInicial.getZ();
-        double x2 = pFinal.getX() + pInicial.getZ();
-        double y1 = pInicial.getY() + pFinal.getZ();
-        double y2 = pFinal.getY() + pFinal.getZ();
+        int x1 = (int) (pInicial.getX() + pInicial.getZ());
+        int x2 = (int) (pFinal.getX() + pInicial.getZ());
+        int y1 = (int) (pInicial.getY() + pFinal.getZ());
+        int y2 = (int) (pFinal.getY() + pFinal.getZ());
 
         if ((x1 == x2) && (y1 == y2)) {
             planoCartesiano.drawPixel(x1, y1, cor);
@@ -124,7 +124,7 @@ public class Rasterizacao {
             }
 
             int count = 0;
-            planoCartesiano.drawPixel(x1, y1, cor); // Pinta o primeiro ponto
+            planoCartesiano.drawPixel((double) x1, (double) y1, cor); // Pinta o primeiro ponto
             setSolution(textAreaSolution, x1, y1, ++count, null);
 
             while ((x1 != x2) || (y1 != y2)) {
@@ -139,7 +139,7 @@ public class Rasterizacao {
                     y1 = y1 + posun_y;
                 }
 
-                planoCartesiano.drawPixel(x1, y1, cor);
+                planoCartesiano.drawPixel((double) x1, (double) y1, cor);
                 setSolution(textAreaSolution, x1, y1, ++count, null);
             }
         }

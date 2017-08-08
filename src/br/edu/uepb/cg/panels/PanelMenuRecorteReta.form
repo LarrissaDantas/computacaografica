@@ -101,18 +101,18 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="spinnerPX" max="32767" attributes="0"/>
-                      <Component id="spinnerX" min="-2" pref="49" max="-2" attributes="0"/>
+                      <Component id="yMin" max="32767" attributes="0"/>
+                      <Component id="xMin" min="-2" pref="49" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="26" max="32767" attributes="0"/>
+                  <EmptySpace pref="30" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="jLabel7" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="1" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="spinnerY" min="-2" pref="49" max="-2" attributes="0"/>
-                      <Component id="spinnerPY" min="-2" pref="49" max="-2" attributes="0"/>
+                      <Component id="xMax" min="-2" pref="49" max="-2" attributes="0"/>
+                      <Component id="yMax" min="-2" pref="49" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -123,25 +123,25 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="spinnerX" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="spinnerY" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="xMin" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="xMax" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel8" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="spinnerPX" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="yMin" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="spinnerPY" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="yMax" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="14" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JSpinner" name="spinnerX">
+        <Component class="javax.swing.JSpinner" name="xMin">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
@@ -174,10 +174,10 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Xmin"/>
+            <Property name="text" type="java.lang.String" value="Ymin"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="spinnerPX">
+        <Component class="javax.swing.JSpinner" name="yMin">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
@@ -213,7 +213,7 @@
             <Property name="text" type="java.lang.String" value="Xm&#xe1;x"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="spinnerY">
+        <Component class="javax.swing.JSpinner" name="xMax">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
@@ -233,7 +233,7 @@
             </Property>
           </Properties>
         </Component>
-        <Component class="javax.swing.JSpinner" name="spinnerPY">
+        <Component class="javax.swing.JSpinner" name="yMax">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="0"/>
@@ -490,7 +490,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="desenharReta"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="recorteReta"/>
       </Events>
     </Component>
     <Component class="javax.swing.JSeparator" name="jSeparator1">
@@ -522,7 +522,7 @@
         </Property>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btDesenhaLinha1desenharReta"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="desenhaReta"/>
       </Events>
     </Component>
   </SubComponents>

@@ -2,9 +2,17 @@ package br.edu.uepb.cg.panels;
 
 import br.edu.uepb.cg.App;
 import br.edu.uepb.cg.enums.RasterizacaoEnum;
+import br.edu.uepb.cg.exceptions.RecorteException;
 import br.edu.uepb.cg.retas.Ponto;
+import br.edu.uepb.cg.retas.Rasterizacao;
+import br.edu.uepb.cg.retas.RecorteLinha;
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JColorChooser;
+import javax.swing.JOptionPane;
 
 /**
  * Representa o menu para manipulação de recorte de retas
@@ -18,6 +26,7 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
     private Ponto pontoInicial, pontoFinal;
     private Color color;
     private RasterizacaoEnum tipoAlgoritimo;
+    private List<Ponto> listaPontos;
 
     /**
      * Construtor
@@ -25,7 +34,7 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
     private PanelMenuRecorteReta() {
         initComponents();
     }
-    
+
     public static synchronized PanelMenuRecorteReta getInstance() {
         if (instance == null) {
             instance = new PanelMenuRecorteReta();
@@ -64,7 +73,7 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
     public void setColor(Color color) {
         this.color = color;
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -76,14 +85,14 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
 
         buttonGroupAlgoritmos = new javax.swing.ButtonGroup();
         jPanel4 = new javax.swing.JPanel();
-        spinnerX = new javax.swing.JSpinner();
+        xMin = new javax.swing.JSpinner();
         jLabel1 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        spinnerPX = new javax.swing.JSpinner();
+        yMin = new javax.swing.JSpinner();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        spinnerY = new javax.swing.JSpinner();
-        spinnerPY = new javax.swing.JSpinner();
+        xMax = new javax.swing.JSpinner();
+        yMax = new javax.swing.JSpinner();
         jPanel5 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -110,25 +119,25 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
         jPanel4.setMinimumSize(new java.awt.Dimension(220, 0));
         jPanel4.setPreferredSize(new java.awt.Dimension(220, 106));
 
-        spinnerX.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerX.setModel(new javax.swing.SpinnerNumberModel(50.0d, null, null, 1.0d));
-        spinnerX.setToolTipText("Largura do objeto...");
-        spinnerX.setMaximumSize(new java.awt.Dimension(30, 25));
-        spinnerX.setMinimumSize(new java.awt.Dimension(30, 25));
-        spinnerX.setPreferredSize(new java.awt.Dimension(30, 25));
+        xMin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        xMin.setModel(new javax.swing.SpinnerNumberModel(50.0d, null, null, 1.0d));
+        xMin.setToolTipText("Largura do objeto...");
+        xMin.setMaximumSize(new java.awt.Dimension(30, 25));
+        xMin.setMinimumSize(new java.awt.Dimension(30, 25));
+        xMin.setPreferredSize(new java.awt.Dimension(30, 25));
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("Xmin");
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jLabel6.setText("Xmin");
+        jLabel6.setText("Ymin");
 
-        spinnerPX.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerPX.setModel(new javax.swing.SpinnerNumberModel(50.0d, null, null, 1.0d));
-        spinnerPX.setToolTipText("Coordenada de X...");
-        spinnerPX.setMaximumSize(new java.awt.Dimension(30, 25));
-        spinnerPX.setMinimumSize(new java.awt.Dimension(30, 25));
-        spinnerPX.setPreferredSize(new java.awt.Dimension(30, 25));
+        yMin.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        yMin.setModel(new javax.swing.SpinnerNumberModel(50.0d, null, null, 1.0d));
+        yMin.setToolTipText("Coordenada de X...");
+        yMin.setMaximumSize(new java.awt.Dimension(30, 25));
+        yMin.setMinimumSize(new java.awt.Dimension(30, 25));
+        yMin.setPreferredSize(new java.awt.Dimension(30, 25));
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel7.setText("Ymáx");
@@ -136,19 +145,19 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel8.setText("Xmáx");
 
-        spinnerY.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerY.setModel(new javax.swing.SpinnerNumberModel(200.0d, null, null, 1.0d));
-        spinnerY.setToolTipText("Altura do objeto...");
-        spinnerY.setMaximumSize(new java.awt.Dimension(63, 25));
-        spinnerY.setMinimumSize(new java.awt.Dimension(63, 25));
-        spinnerY.setPreferredSize(new java.awt.Dimension(63, 25));
+        xMax.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        xMax.setModel(new javax.swing.SpinnerNumberModel(200.0d, null, null, 1.0d));
+        xMax.setToolTipText("Altura do objeto...");
+        xMax.setMaximumSize(new java.awt.Dimension(63, 25));
+        xMax.setMinimumSize(new java.awt.Dimension(63, 25));
+        xMax.setPreferredSize(new java.awt.Dimension(63, 25));
 
-        spinnerPY.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        spinnerPY.setModel(new javax.swing.SpinnerNumberModel(150.0d, null, null, 1.0d));
-        spinnerPY.setToolTipText("Coordenada de Y...");
-        spinnerPY.setMaximumSize(new java.awt.Dimension(30, 25));
-        spinnerPY.setMinimumSize(new java.awt.Dimension(30, 25));
-        spinnerPY.setPreferredSize(new java.awt.Dimension(30, 25));
+        yMax.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        yMax.setModel(new javax.swing.SpinnerNumberModel(150.0d, null, null, 1.0d));
+        yMax.setToolTipText("Coordenada de Y...");
+        yMax.setMaximumSize(new java.awt.Dimension(30, 25));
+        yMax.setMinimumSize(new java.awt.Dimension(30, 25));
+        yMax.setPreferredSize(new java.awt.Dimension(30, 25));
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -161,16 +170,16 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
                     .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(spinnerPX, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(spinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
+                    .addComponent(yMin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(xMin, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel7)
                     .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(spinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinnerPY, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(xMax, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yMax, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -178,17 +187,17 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spinnerX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(spinnerY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(xMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(xMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(spinnerPX, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(yMin, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
                     .addComponent(jLabel7)
-                    .addComponent(spinnerPY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(yMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Pontos"));
@@ -314,7 +323,7 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
         btDesenhaLinha.setPreferredSize(new java.awt.Dimension(61, 30));
         btDesenhaLinha.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                desenharReta(evt);
+                recorteReta(evt);
             }
         });
 
@@ -332,7 +341,7 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
         btDesenhaLinha1.setPreferredSize(new java.awt.Dimension(61, 30));
         btDesenhaLinha1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btDesenhaLinha1desenharReta(evt);
+                desenhaReta(evt);
             }
         });
 
@@ -391,24 +400,53 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
      *
      * @param evt
      */
-    private void desenharReta(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desenharReta
+    private void recorteReta(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recorteReta
+        PanelPlanoCartesiano.getInstance().redesenha();
+        listaPontos = new ArrayList<>();
+        List<Ponto> listaPontoReta;
 
-        // Seta a cor selecionada no jPanel 
+        listaPontos.add(new Ponto((double) pontoInicialX.getValue(), (double) pontoInicialY.getValue()));
+        listaPontos.add(new Ponto((double) pontoFinalX.getValue(), (double) pontoFinalY.getValue()));
+
+        try {
+            if (RecorteLinha.getInstance().isRetaInJanela((double) xMin.getValue(), (double) xMax.getValue(), (double) yMin.getValue(), (double) yMax.getValue(), listaPontos.get(0), listaPontos.get(1))) {
+                listaPontoReta = RecorteLinha.getInstance().recorteFinal((double) xMin.getValue(), (double) xMax.getValue(), (double) yMin.getValue(), (double) yMax.getValue(), listaPontos);
+                System.out.println("pontoFinal1Panel " + listaPontoReta.get(0));
+                System.out.println("pontoFinal2Panel " + listaPontoReta.get(1));
+                btCriarJanela(evt);
+                Rasterizacao.getInstance().pontoMedio(listaPontoReta.get(0), listaPontoReta.get(1), this.getColor(), null);
+//                PanelPlanoCartesiano.getInstance().getGraphics().drawLine((int)listaPontoReta.get(0).getX() , (int)listaPontoReta.get(0).getY(), (int) (int)listaPontoReta.get(1).getX(), (int) (int)listaPontoReta.get(1).getY());
+            }
+
+// Seta a cor selecionada no jPanel 
+        } catch (RecorteException ex) {
+            JOptionPane.showMessageDialog(this.getRootPane(), ex.getMessage(), "", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_recorteReta
+
+    private void btCriarJanela(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCriarJanela
+        listaPontos = new ArrayList<>();
+
+        listaPontos.add(new Ponto((double) xMin.getValue(), (double) yMin.getValue()));
+        listaPontos.add(new Ponto((double) xMax.getValue(), (double) yMin.getValue()));
+        listaPontos.add(new Ponto((double) xMax.getValue(), (double) yMax.getValue()));
+        listaPontos.add(new Ponto((double) xMin.getValue(), (double) yMax.getValue()));
+
+        PanelPlanoCartesiano.getInstance().desenhaViewPort(listaPontos);
+
+    }//GEN-LAST:event_btCriarJanela
+
+    private void desenhaReta(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_desenhaReta
         setColor(panelCor.getBackground());
-
+        PanelPlanoCartesiano.getInstance().desenhaViewPort(listaPontos);
         // Seta as coordenadas dos pontos e seta no obejto Ponto
         setPontoInicial(new Ponto((double) pontoInicialX.getValue(), (double) pontoInicialY.getValue()));
         setPontoFinal(new Ponto((double) pontoFinalX.getValue(), (double) pontoFinalY.getValue()));
 
-        App.runResult(this);
-    }//GEN-LAST:event_desenharReta
-
-    private void btCriarJanela(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCriarJanela
-    }//GEN-LAST:event_btCriarJanela
-
-    private void btDesenhaLinha1desenharReta(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDesenhaLinha1desenharReta
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btDesenhaLinha1desenharReta
+//        PanelPlanoCartesiano.getInstance().getGraphics().drawLine((int) pontoInicial.getX(), (int) pontoInicial.getY(), (int) pontoFinal.getX(), (int) pontoFinal.getY());
+        Rasterizacao.getInstance().pontoMedio(this.getPontoInicial(), this.getPontoFinal(), this.getColor(), null);
+    }//GEN-LAST:event_desenhaReta
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -434,9 +472,9 @@ public class PanelMenuRecorteReta extends javax.swing.JPanel {
     private javax.swing.JSpinner pontoFinalY;
     private javax.swing.JSpinner pontoInicialX;
     private javax.swing.JSpinner pontoInicialY;
-    private javax.swing.JSpinner spinnerPX;
-    private javax.swing.JSpinner spinnerPY;
-    private javax.swing.JSpinner spinnerX;
-    private javax.swing.JSpinner spinnerY;
+    private javax.swing.JSpinner xMax;
+    private javax.swing.JSpinner xMin;
+    private javax.swing.JSpinner yMax;
+    private javax.swing.JSpinner yMin;
     // End of variables declaration//GEN-END:variables
 }

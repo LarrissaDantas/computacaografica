@@ -11,6 +11,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.util.List;
 
 /**
  * Representa um plano cartesiano.
@@ -172,7 +173,7 @@ public class PanelPlanoCartesiano extends JPanel {
         // Normalizando os pontos
         x = (x + PanelPlanoCartesiano.getInstance().getValorCentroX());
         y = (PanelPlanoCartesiano.getInstance().getValorCentroY() - y);
-
+        
         drawPixel(Math.round((float) x), Math.round((float) y), color);
     }
 
@@ -205,7 +206,7 @@ public class PanelPlanoCartesiano extends JPanel {
         redesenha3D();
         Rasterizacao rast = Rasterizacao.getInstance();
 
-        double fatorCentroCubo = 0;//matrizObjeto3D[0][4]/2; // (profundidade / 2)/2
+        double fatorCentroCubo = 25;//matrizObjeto3D[0][4]/2; // (profundidade / 2)/2
         Ponto A = new Ponto(matrizObjeto3D[0][0] - fatorCentroCubo, matrizObjeto3D[1][0] - fatorCentroCubo, matrizObjeto3D[2][0] - fatorCentroCubo);
         Ponto B = new Ponto(matrizObjeto3D[0][1] - fatorCentroCubo, matrizObjeto3D[1][1] - fatorCentroCubo, matrizObjeto3D[2][1] - fatorCentroCubo);
         Ponto C = new Ponto(matrizObjeto3D[0][2] - fatorCentroCubo, matrizObjeto3D[1][2] - fatorCentroCubo, matrizObjeto3D[2][2] - fatorCentroCubo);
@@ -325,5 +326,20 @@ public class PanelPlanoCartesiano extends JPanel {
      */
     public int getCorPixel(int corRGB) {
         return new Color(corRGB, corRGB, corRGB).getRGB();
+    }
+    
+    public void desenhaViewPort(List<Ponto> listaPontos){
+        this.redesenha();
+        Rasterizacao rast = Rasterizacao.getInstance();
+        /**
+         * a-b
+         * b-c
+         * c-d
+         */
+        rast.pontoMedio(listaPontos.get(0), listaPontos.get(1), Color.BLACK, null);
+        rast.pontoMedio(listaPontos.get(1), listaPontos.get(2), Color.BLACK, null);
+        rast.pontoMedio(listaPontos.get(2), listaPontos.get(3), Color.BLACK, null);
+        rast.pontoMedio(listaPontos.get(3), listaPontos.get(0), Color.BLACK, null);
+        
     }
 }
