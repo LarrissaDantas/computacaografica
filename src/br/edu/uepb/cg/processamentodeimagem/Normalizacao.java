@@ -32,6 +32,15 @@ public class Normalizacao {
         return imagem;
     }
 
+    public static int normalizaPixel(int pixel) {
+        if (pixel > 255) {
+            return 255;
+        } else if (pixel < 0) {
+            return 0;
+        }
+        return pixel;
+    }
+
     /**
      * Normaliza os pixels contindo na matriz que representa uma imagem
      *
@@ -54,8 +63,21 @@ public class Normalizacao {
         return matrizNomalizada;
     }
 
-    private static int getCorPixel(int corRGB) {
+    public static int getCorPixel(int corRGB) {
         return new Color(corRGB, corRGB, corRGB).getRGB();
+    }
+
+    public static BufferedImage matrizToBufferedImage(int[][] matrizImg) {
+        BufferedImage imagem = new BufferedImage(matrizImg[0].length, matrizImg.length, BufferedImage.TYPE_INT_RGB);
+
+        for (int i = 0; i < matrizImg.length; i++) {
+            for (int j = 0; j < matrizImg[0].length; j++) {
+                // Equação para normalizar pixels
+                imagem.setRGB(j, i, getCorPixel(matrizImg[i][j]));
+            }
+        }
+
+        return imagem;
     }
 
     /**

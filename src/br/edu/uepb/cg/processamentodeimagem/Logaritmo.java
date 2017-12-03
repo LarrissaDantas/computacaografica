@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
  * @author geovanniovinhas
  */
 public class Logaritmo {
+
     private int[][] imagem;
     private int width;
     private int height;
@@ -51,14 +52,15 @@ public class Logaritmo {
     public void setConstanteA(float constanteA) {
         this.constanteA = constanteA;
     }
-    
-    public BufferedImage run(){
+
+    public BufferedImage run() {
         int matrizImagem[][] = new int[width][height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                matrizImagem[i][j] = (int)(constanteA * (Math.log(imagem[i][j] + 1)));
+                matrizImagem[i][j] = Normalizacao.normalizaPixel((int) (constanteA * (Math.log10(imagem[i][j]) + 1)));
+//                matrizImagem[i][j] = (int) (constanteA * (Math.log10(imagem[i][j] + 1)));
             }
         }
-        return Normalizacao.normalizaImage(matrizImagem);
+        return Normalizacao.matrizToBufferedImage(matrizImagem);
     }
 }
