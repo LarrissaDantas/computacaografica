@@ -20,7 +20,7 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
         }
         return instance;
     }
-
+    
     /**
      * Construtor
      */
@@ -30,22 +30,16 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
     }
 
     public float getDados() {
-        return dados;
+        return (float) tfGammaY.getValue();
     }
 
-    public void setDados(float dados) {
-        this.dados = dados;
-    }
-    
     public TransformacoesImagemEnum getTipoAlgoritimo() {
         if (rbNegativo.isSelected()) {
             setTipoAlgoritimo(TransformacoesImagemEnum.NEGATIVO);
         } else if (rbGamma.isSelected()) {
             setTipoAlgoritimo(TransformacoesImagemEnum.GAMMA);
-            setDados(Float.parseFloat(tfGammaY.getText()));
         } else if (rbLog.isSelected()) {
             setTipoAlgoritimo(TransformacoesImagemEnum.LOG);
-            setDados(Float.parseFloat(tfGammaY.getText()));
         }
         return tipoAlgoritimo;
     }
@@ -69,8 +63,8 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
         rbGamma = new javax.swing.JRadioButton();
         rbLog = new javax.swing.JRadioButton();
         panelConfigGamma = new javax.swing.JPanel();
-        tfGammaY = new javax.swing.JTextField();
         lbInfor = new javax.swing.JLabel();
+        tfGammaY = new javax.swing.JSpinner();
 
         setMaximumSize(new java.awt.Dimension(240, 32767));
         setMinimumSize(new java.awt.Dimension(240, 0));
@@ -108,11 +102,10 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
 
         panelConfigGamma.setBorder(javax.swing.BorderFactory.createTitledBorder("Dados para operação"));
 
-        tfGammaY.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
-        tfGammaY.setToolTipText("(0 <= y <= 1)");
-        tfGammaY.setPreferredSize(new java.awt.Dimension(69, 30));
-
         lbInfor.setText("c = 1 e y = (0 <= y <= 1)");
+
+        tfGammaY.setModel(new javax.swing.SpinnerNumberModel(0.0f, null, null, 1.0f));
+        tfGammaY.setMinimumSize(new java.awt.Dimension(29, 30));
 
         javax.swing.GroupLayout panelConfigGammaLayout = new javax.swing.GroupLayout(panelConfigGamma);
         panelConfigGamma.setLayout(panelConfigGammaLayout);
@@ -121,10 +114,10 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
             .addGroup(panelConfigGammaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panelConfigGammaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfGammaY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(panelConfigGammaLayout.createSequentialGroup()
                         .addComponent(lbInfor)
-                        .addGap(0, 29, Short.MAX_VALUE)))
+                        .addGap(0, 29, Short.MAX_VALUE))
+                    .addComponent(tfGammaY, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         panelConfigGammaLayout.setVerticalGroup(
@@ -134,7 +127,7 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
                 .addComponent(lbInfor)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(tfGammaY, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(19, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -181,7 +174,7 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(488, Short.MAX_VALUE))
+                .addContainerGap(481, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -212,6 +205,6 @@ public class PanelMenuTransformacoes extends javax.swing.JPanel {
     private javax.swing.JRadioButton rbGamma;
     private javax.swing.JRadioButton rbLog;
     private javax.swing.JRadioButton rbNegativo;
-    public static javax.swing.JTextField tfGammaY;
+    private javax.swing.JSpinner tfGammaY;
     // End of variables declaration//GEN-END:variables
 }

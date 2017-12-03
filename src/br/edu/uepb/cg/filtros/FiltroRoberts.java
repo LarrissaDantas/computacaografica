@@ -71,11 +71,11 @@ public class FiltroRoberts {
                 }
 
                 // Adiciona o novo valor na matriz
-                matrizImagem[i][j] = Math.abs(aproximacaoX) + Math.abs(aproximacaoY);;
+                matrizImagem[i][j] = Math.abs(aproximacaoX) + Math.abs(aproximacaoY);
+                matrizImagem[i][j] = Normalizacao.normalizaPixel(matrizImagem[i][j]);
             }
-
         }
 
-        return Normalizacao.normalizaImage(matrizImagem);
+        return Normalizacao.matrizToBufferedImage(matrizImagem);
     }
 }

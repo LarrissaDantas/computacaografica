@@ -3,6 +3,7 @@ package br.edu.uepb.cg.panels;
 import br.edu.uepb.cg.retas.Ponto;
 import br.edu.uepb.cg.retas.Rasterizacao;
 import br.edu.uepb.cg.transformacoes.Imagem;
+import br.edu.uepb.cg.transformacoes.Matriz;
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -173,7 +174,7 @@ public class PanelPlanoCartesiano extends JPanel {
         // Normalizando os pontos
         x = (x + PanelPlanoCartesiano.getInstance().getValorCentroX());
         y = (PanelPlanoCartesiano.getInstance().getValorCentroY() - y);
-        
+
         drawPixel(Math.round((float) x), Math.round((float) y), color);
     }
 
@@ -275,7 +276,21 @@ public class PanelPlanoCartesiano extends JPanel {
                 bufferedImg.setRGB(row, col, getCorPixel(img.getMatrizPixel()[row][col]));
             }
         }
+
+        this.drawImage(bufferedImg);
+    }
+
+    public void drawImageROBSON(int[][] matrizImage, double[][] matrizPosicao) {
+        redesenha();
         
+        BufferedImage bufferedImg = new BufferedImage(matrizImage.length, matrizImage.length, BufferedImage.TYPE_INT_RGB);
+        for (int row = 0; row < bufferedImg.getWidth(); row++) {
+            for (int col = 0; col < bufferedImg.getHeight(); col++) {
+                // Prepara a imagem para ser desenhada no jpanel
+                bufferedImg.setRGB(col, row, getCorPixel((int) matrizImage[row][col]));
+            }
+        }
+
         this.drawImage(bufferedImg);
     }
 
@@ -290,24 +305,26 @@ public class PanelPlanoCartesiano extends JPanel {
     }
 
     /**
-     * Recebe a imagem a ser processada e o AffineTransform contendo as transformações na imagem e desenha no plano cartesiano.
-     * 
+     * Recebe a imagem a ser processada e o AffineTransform contendo as
+     * transformações na imagem e desenha no plano cartesiano.
+     *
      * @param img
-     * @param affineTransform 
+     * @param affineTransform
      */
     public void drawImage(Imagem img, AffineTransform affineTransform) {
         BufferedImage bufferedImg = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
-        
+
         // Ajsuta a imagem
         for (int row = 0; row < img.getBufferedImage().getWidth(); row++) {
             for (int col = 0; col < img.getBufferedImage().getHeight(); col++) {
                 // Prepara a imagem para ser desenhada no jpanel
-                if(row < 256 && col < 256)
+                if (row < 256 && col < 256) {
                     bufferedImg.setRGB(row, col, getCorPixel(img.getMatrizPixel()[row][col]));
+                }
             }
         }
         img.setBufferedImage(bufferedImg);
-        
+
         redesenha(); // redesenha plano cartesiano
 
         /**
@@ -327,19 +344,17 @@ public class PanelPlanoCartesiano extends JPanel {
     public int getCorPixel(int corRGB) {
         return new Color(corRGB, corRGB, corRGB).getRGB();
     }
-    
-    public void desenhaViewPort(List<Ponto> listaPontos){
+
+    public void desenhaViewPort(List<Ponto> listaPontos) {
         this.redesenha();
         Rasterizacao rast = Rasterizacao.getInstance();
         /**
-         * a-b
-         * b-c
-         * c-d
+         * a-b b-c c-d
          */
         rast.pontoMedio(listaPontos.get(0), listaPontos.get(1), Color.BLACK, null);
         rast.pontoMedio(listaPontos.get(1), listaPontos.get(2), Color.BLACK, null);
         rast.pontoMedio(listaPontos.get(2), listaPontos.get(3), Color.BLACK, null);
         rast.pontoMedio(listaPontos.get(3), listaPontos.get(0), Color.BLACK, null);
-        
+
     }
 }

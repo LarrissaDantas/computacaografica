@@ -13,6 +13,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Métodos para transformações 2D.
@@ -23,7 +25,7 @@ import java.util.Stack;
 public class TransformacoesImagem {
 
     private static TransformacoesImagem instance;
-
+    private double[] origemPixelCentro = new double[]{0, 0};
     private double[][] matrizM;
 
     private TransformacoesImagem() {
@@ -45,18 +47,61 @@ public class TransformacoesImagem {
      * @param ty
      */
     public void translacao(Imagem img, double tx, double ty) {
-        // Atualiza o ponto da imagem com o valor da translação
-        img.setPonto(new Ponto(img.getPonto().getX() + tx, img.getPonto().getY() + ty));
+//        // Atualiza o ponto da imagem com o valor da translação
+//        img.setPonto(new Ponto(img.getPonto().getX() + tx, img.getPonto().getY() + ty));
+//
+//        /**
+//         * Aplica a translação usando o AffineTransform
+//         */
+//        AffineTransform affineTransform = new AffineTransform();
+//        affineTransform.translate(img.getPonto().getX(), -img.getPonto().getY());
+//
+//        // Chama o método responsável para tratar a imagem e desenhar no plano cartesiano
+//        PanelPlanoCartesiano.getInstance().drawImage(img, affineTransform);
 
-        /**
-         * Aplica a translação usando o AffineTransform
-         */
-        AffineTransform affineTransform = new AffineTransform();
-        affineTransform.translate(img.getPonto().getX(), -img.getPonto().getY());
+        double[][] matrizM = new double[img.getWidth()][img.getHeight()];
+        try {
+            double[][] pixels;
+            for (int i = 0; i < img.getWidth(); i++) {
+                for (int j = 0; j < img.getHeight(); j++) {
+                    pixels = new double[1][3];
+                    pixels[0][0] = i;
+                    pixels[0][1] = j;
+                    pixels[0][2] = 1;
 
-        // Chama o método responsável para tratar a imagem e desenhar no plano cartesiano
-        PanelPlanoCartesiano.getInstance().drawImage(img, affineTransform);
+                    int hwidth = img.getWidth() / 2;
+                    int hheight = img.getHeight() / 2;
+
+                    int xt = i - hwidth;
+                    int yt = j - hheight;
+
+                    double[][] transformado = new double[1][3];
+
+                    // translada
+                    matrizM = Matriz.multiplicaMatrizes(pixels, geraMatrizTranslacao(tx, ty));
+
+                    int pixelX = (int) transformado[0][0];
+                    int pixelY = (int) transformado[0][1];
+
+                    // Transforma o pixel.
+                    if (pixelX < img.getWidth() && pixelX > 0 && pixelY < img.getHeight() && pixelY > 0) {
+                        matrizM[pixelX][pixelY] = img.getMatrizPixel()[i][j];
+                    }
+
+                    // Guarda a origem.
+                    if ((int) (img.getWidth() / 2) == i && (int) (img.getHeight() / 2) == j) {
+                        origemPixelCentro = new double[]{i - pixelX, j - pixelY};
+                    }
+//                    Matriz.printMatriz(matrizM, "M");
+                }
+            }
+            PanelPlanoCartesiano.getInstance().drawImageROBSON(img.getMatrizPixel(), matrizM);
+        } catch (Exception ex) {
+            Logger.getLogger(TransformacoesImagem.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
+
 
     /**
      * Aplica rotacao no objeto passado como parametro, de acordo com angulo.
@@ -193,7 +238,7 @@ public class TransformacoesImagem {
         AffineTransform at = new AffineTransform();
         at.translate(panel.getValorCentroX() + imagem.getWidth() * cx, panel.getValorCentroY() - imagem.getHeight());
         at.shear(-cx, -cy);
-        
+
         g2d.drawImage(imagem.getBufferedImage(), at, null);
     }
 

@@ -57,10 +57,10 @@ public class Gamma {
         int matrizImagem[][] = new int[width][height];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
-                matrizImagem[i][j] = (int) (1 * (Math.pow(imagem[i][j], gamma)));
+                matrizImagem[i][j] = Normalizacao.normalizaPixel((int) (2 * (Math.pow(imagem[i][j], gamma))));
             }
         }
 
-        return Normalizacao.normalizaImage(matrizImagem);
+        return Normalizacao.matrizToBufferedImage(matrizImagem);
     }
 }

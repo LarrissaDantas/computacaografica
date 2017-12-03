@@ -33,6 +33,10 @@ import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
@@ -650,14 +654,20 @@ public class App extends javax.swing.JFrame {
     }//GEN-LAST:event_actionResized
 
     private void openTransImagem(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openTransImagem
-        panelMenuLeft.setVisible(true);
-
-        if (!panelFooter.isValid()) {
-            setDefaultBox();
-        } else {
-            PanelPlanoCartesiano.getInstance().redesenha();
+        try {
+            //        panelMenuLeft.setVisible(true);
+//
+//        if (!panelFooter.isValid()) {
+//            setDefaultBox();
+//        } else {
+//            PanelPlanoCartesiano.getInstance().redesenha();
+//        }
+//        changeMenuLeft(panelMenuImagem);
+            String path = new File("." + File.separator + "external").getCanonicalPath();
+            Runtime.getRuntime().exec(path + File.separator + "imagemOpen.exe", null, new File(path));
+        } catch (IOException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         }
-        changeMenuLeft(panelMenuImagem);
     }//GEN-LAST:event_openTransImagem
 
     private void menuRecorteReta(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRecorteReta
@@ -938,8 +948,8 @@ public class App extends javax.swing.JFrame {
             PanelPlanoCartesiano.getInstance().drawObjeto3D(matrizObjeto3D, menu.getColor());
         }
     }
-    
-     /**
+
+    /**
      * Processa o pedido vindo da tela de transformações 2D.
      *
      * @param menu
@@ -957,7 +967,6 @@ public class App extends javax.swing.JFrame {
             /**
              * Fatores de translação.
              */
-
             switch (menu.getTipoAlgoritimo()) {
                 case TRANSLACAO:
                     // Aplica translação

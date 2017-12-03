@@ -2,6 +2,7 @@ package br.edu.uepb.cg.transformacoes;
 
 import br.edu.uepb.cg.panels.PanelFiltros;
 import br.edu.uepb.cg.panels.PanelMenuImagem;
+import br.edu.uepb.cg.processamentodeimagem.Normalizacao;
 import br.edu.uepb.cg.retas.Ponto;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
